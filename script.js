@@ -22,8 +22,17 @@ function prosesLogin() {
     const fp = getFingerprint();
     const ua = navigator.userAgent;
 
-    fetch(`${WEB_APP_URL}?action=login&user=${user}&pin=${pin}&fp=${fp}&ua=${ua}`)
-    .then(res => res.json())
+    // Ganti bagian fetch di prosesLogin atau initDashboard dengan ini
+fetch(url, {
+    method: 'GET',
+    mode: 'cors', // Paksa mode CORS
+    cache: 'no-cache', // Jangan simpan memori lama
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+.then(res => res.json())
+// ... sisa kodenya sama
     .then(res => {
         showLoading(false); 
         if(res.status === "success") { 
