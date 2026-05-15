@@ -1,6 +1,6 @@
 alert("Script Terbaca!");
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwnyxovvVjNqIWYrxAG53n3c7_dZnpuscDyxriE06yH_Ots4dpdmOuiE48wzV2hLyk3/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxIrfBwErWbybUmSrgGGw88NZgq9Esdlag8DJoiDLDE8fUb_VHYlYyTt63XwJQzbt2i/exec";
 
 let warnedOnce = false;
 let curRider = {}, masterTarif = [], cart = [], pendingItem = null, curNomStr = "0";
