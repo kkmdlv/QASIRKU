@@ -1,7 +1,7 @@
 // DEBUG: Jika muncul alert ini, berarti koneksi GitHub ke APK AMAN
 alert("QASIRKU Engine v1.1 Dimuat!");
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzsUReVGdtgIeEcs8R4CQULuFIsh7sfayC0RPODky2xBpk-8fIzji-Sz5wEIY6N6Ci2/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyE1MxgF8WDZnV2eKWUqPuaORnvliFS-LFV3K4ZC5TRMOfqhHTO0ilDMBWMZepXUJ_6/exec";
 
 let curRider = {}, masterTarif = [], cart = [], curNomStr = "0";
 
@@ -38,42 +38,43 @@ function prosesLogin() {
     
     if(!user || !pin) { showLoading(false); return alert("Isi Nama & PIN!"); }
 
-    const url = `${WEB_APP_URL}?action=login&user=${encodeURIComponent(user)}&pin=${encodeURIComponent(pin)}&fp=${getFingerprint()}&ua=${navigator.userAgent}`;
+    // Gunakan URL sederhana tanpa banyak embel-embel dulu
+    const url = WEB_APP_URL + "?action=login&user=" + encodeURIComponent(user) + "&pin=" + encodeURIComponent(pin);
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            showLoading(false);
-            if (xhr.status == 200) {
-                try {
-                    var res = JSON.parse(xhr.responseText);
-                    if(res.status === "success") { 
-                        curRider = res.rider; 
-                        localStorage.setItem('kukami_session', JSON.stringify(curRider)); 
-                        // Jika berhasil, lanjut ke Dashboard
-                        initDashboard(); 
-                    } else {
-                        alert("Gagal: " + (res.message || "PIN Salah"));
-                    }
-                } catch(e) {
-                    alert("Respon Server Error. Pastikan Deploy GAS sudah 'Anyone'.");
-                }
+    // Paksa browser untuk tidak menunggu terlalu lama
+    xhr.timeout = 15000; 
+
+    xhr.onload = function() {
+        showLoading(false);
+        try {
+            var res = JSON.parse(xhr.responseText);
+            if(res.status === "success") { 
+                curRider = res.rider; 
+                localStorage.setItem('kukami_session', JSON.stringify(curRider)); 
+                initDashboard(); 
             } else {
-                alert("Koneksi Gagal. Status: " + xhr.status);
+                alert("PIN SALAH ATAU USER TIDAK ADA");
             }
+        } catch(e) {
+            alert("GAS Berhasil dipanggil, tapi format data salah.");
         }
     };
-    
+
     xhr.onerror = function() {
         showLoading(false);
-        alert("Akses Diblokir! Cek Internet atau Setting MIT.");
+        alert("PANGGILAN DIBLOKIR: Cek URL GAS di GitHub, pastikan tidak ada spasi!");
     };
     
+    xhr.ontimeout = function() {
+        showLoading(false);
+        alert("RTO: Koneksi Google sedang sangat lambat.");
+    };
+
     xhr.send();
 }
-
 
 // --- DASHBOARD ---
 function initDashboard() {
