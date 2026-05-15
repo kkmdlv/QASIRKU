@@ -1,7 +1,7 @@
 // DEBUG: Jika muncul alert ini, koneksi GitHub ke APK AMAN
 alert("KUKAMI Engine v1.1 Aktif!");
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjusUcLi9En6KwZwsxU8UGg44NFrffqj0bSkBygQmDCvdPCDKL4DMhaTsAJiznBbn5/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby1x8eNx_ynDqES6BvcagDUI5ZXsjTIb_K0cwj0vfNCU-yfBWhz-rDDCh0EzgG3iWtU/exec";
 
 let curRider = {}, masterTarif = [], cart = [], curNomStr = "0";
 
