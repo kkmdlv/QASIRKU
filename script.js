@@ -1,4 +1,4 @@
-const WEB_APP_URL = "URL_HASIL_DEPLOY_BARU_BOS";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx-2y76bO3ZfhYjQHplFe-tisjKv9zPmdXIBwLiz_bYo10ceMxaqBoBueyr6Qre85oS/exec";
 
 let curRider = {}, masterTarif = [], cart = [], curNomStr = "0";
 
