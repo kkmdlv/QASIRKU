@@ -17,7 +17,6 @@ const getAngka = (v) => Number(v.toString().replace(/\./g, ""));
 const showLoading = (s) => { 
     const l = document.getElementById('loader'); 
     if(l) l.style.display = s ? 'flex' : 'none'; 
-    // Emergency stop: Jika 15 detik masih muter, matikan paksa
     if(s) setTimeout(() => { if(l) l.style.display = 'none'; }, 15000);
 };
 
@@ -27,7 +26,9 @@ function prosesLogin() {
     const user = document.getElementById('user').value;
     const pin = document.getElementById('pin').value;
     
-    const url = WEB_APP_URL + "?action=login&user=" + encodeURIComponent(user) + "&pin=" + encodeURIComponent(pin);
+    if(!user || !pin) { showLoading(false); return alert("Isi Nama & PIN!"); }
+
+    const url = WEB_APP_URL + "?action=login&user=" + encodeURIComponent(user) + "&pin=" + encodeURIComponent(pin) + "&fp=" + getFingerprint() + "&ua=" + encodeURIComponent(navigator.userAgent);
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
@@ -38,19 +39,17 @@ function prosesLogin() {
                 try {
                     var res = JSON.parse(xhr.responseText);
                     if(res.status === "success") { 
-    // Ambil data rider yang dikirim GAS (Penting: res.rider.id harus ada isinya)
-    curRider = res.rider; 
-    localStorage.setItem('kukami_session', JSON.stringify(curRider)); 
-    
-    alert("Selamat Datang, " + curRider.nama); // Tambahkan alert ini untuk tes
-    initDashboard();
+                        curRider = res.rider; 
+                        localStorage.setItem('kukami_session', JSON.stringify(curRider)); 
+                        alert("Selamat Datang, " + curRider.nama);
+                        initDashboard(); 
                     } else {
                         showLoading(false);
                         alert("Akses Ditolak: Cek Nama & PIN");
                     }
                 } catch(e) {
                     showLoading(false);
-                    alert("Format Data Server Salah!");
+                    alert("Format Data Server Salah! Periksa Deploy GAS Bos.");
                 }
             } else {
                 showLoading(false);
@@ -61,54 +60,23 @@ function prosesLogin() {
     xhr.send();
 }
 
+// --- DASHBOARD (SATU FUNGSI SAJA) ---
 function initDashboard() {
-    // PAKSA PINDAH HALAMAN DULUAN
-    document.getElementById('p-login').style.display = 'none'; 
-    document.getElementById('app-content').style.display = 'block';
-    showLoading(true);
-
-    const targetId = curRider.id || "Unknown";
-    
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", WEB_APP_URL + "?action=getDashboard&id=" + encodeURIComponent(targetId), true);
-    
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            // APAPUN HASILNYA, LOADING HARUS MATI
-            showLoading(false); 
-            
-            if (xhr.status == 200) {
-                try {
-                    var res = JSON.parse(xhr.responseText);
-                    // Update UI (Gunakan pengecekan agar tidak crash jika data kosong)
-                    document.getElementById('r-nama').innerHTML = (res.sapaan || curRider.nama || targetId);
-                    document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
-                    
-                    if(res.stats) {
-                        document.getElementById('h-total').innerText = res.stats.hari.total || 0;
-                        document.getElementById('b-total').innerText = res.stats.bulan.total || 0;
-                    }
-                    
-                    masterTarif = res.listTarif || [];
-                    renderRiwayat(res.riwayat);
-                    // ... sisanya aman
-                } catch(e) {
-                    console.log("Render gagal tapi layar sudah pindah.");
-                }
-            }
-        }
-    };
-    xhr.send();
-}
-
-// --- DASHBOARD ---
-function initDashboard() {
+    // Pindah Tampilan
     document.getElementById('p-login').style.display = 'none'; 
     document.getElementById('app-content').style.display = 'block';
     showLoading(true);
 
     const targetId = curRider.id || JSON.parse(localStorage.getItem('kukami_session') || "{}").id;
-    const url = WEB_APP_URL + "?action=getDashboard&id=" + targetId;
+    
+    // Jika ID tetap kosong, jangan lanjut
+    if(!targetId) {
+        showLoading(false);
+        document.getElementById('p-login').style.display = 'block';
+        return;
+    }
+
+    const url = WEB_APP_URL + "?action=getDashboard&id=" + encodeURIComponent(targetId);
     
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
@@ -126,21 +94,27 @@ function initDashboard() {
                     if(res.foto) document.getElementById('r-foto').src = res.foto;
                     
                     // Stats
-                    document.getElementById('h-total').innerText = res.stats.hari.total;
-                    document.getElementById('h-on').innerText = res.stats.hari.on;
-                    document.getElementById('h-off').innerText = res.stats.hari.off;
-                    document.getElementById('b-total').innerText = res.stats.bulan.total;
-                    document.getElementById('b-on').innerText = res.stats.bulan.on;
-                    document.getElementById('b-off').innerText = res.stats.bulan.off;
+                    if(res.stats) {
+                        document.getElementById('h-total').innerText = res.stats.hari.total || 0;
+                        document.getElementById('h-on').innerText = res.stats.hari.on || 0;
+                        document.getElementById('h-off').innerText = res.stats.hari.off || 0;
+                        document.getElementById('b-total').innerText = res.stats.bulan.total || 0;
+                        document.getElementById('b-on').innerText = res.stats.bulan.on || 0;
+                        document.getElementById('b-off').innerText = res.stats.bulan.off || 0;
+                    }
 
                     masterTarif = res.listTarif || [];
                     if(typeof renderRiwayat === 'function') renderRiwayat(res.riwayat);
                     
+                    // Render Kategori
                     let cats = [...new Set(masterTarif.map(x => x.kategori))];
                     if (cats.length > 0) {
-                        document.getElementById('cat-list').innerHTML = cats.map(cat => 
-                            `<div class="chip" onclick="renderGrid('${cat}')">${cat}</div>`).join('');
-                        if(typeof renderGrid === 'function') renderGrid(cats[0]);
+                        const catList = document.getElementById('cat-list');
+                        if(catList) {
+                            catList.innerHTML = cats.map(cat => 
+                                `<div class="chip" onclick="renderGrid('${cat}')">${cat}</div>`).join('');
+                            if(typeof renderGrid === 'function') renderGrid(cats[0]);
+                        }
                     }
                 } catch(e) {
                     console.error("Gagal Render Dashboard", e);
