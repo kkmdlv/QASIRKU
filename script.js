@@ -1,3 +1,5 @@
+const WEB_APP_URL = "ISI_DENGAN_URL_DEPLOYMENT_GOOGLE_BOS_DI_SINI";
+
 <script>
     let warnedOnce = false;
     let curRider = {}, masterTarif = [], cart = [], pendingItem = null, curNomStr = "0";
@@ -15,13 +17,24 @@
 
     // AUTH
     function prosesLogin() { 
-      showLoading(true); 
-      google.script.run.withSuccessHandler(res => { 
-        showLoading(false); 
-        if(res.status === "success") { curRider = res.rider; localStorage.setItem('kukami_session', JSON.stringify(curRider)); initDashboard(); } 
-        else alert("Akses Ditolak!"); 
-      }).loginRider(document.getElementById('user').value, document.getElementById('pin').value, getFingerprint(), navigator.userAgent); 
-    }
+  showLoading(true); 
+  const user = document.getElementById('user').value;
+  const pin = document.getElementById('pin').value;
+  const fp = getFingerprint();
+  const ua = navigator.userAgent;
+
+  fetch(`${WEB_APP_URL}?action=login&user=${user}&pin=${pin}&fp=${fp}&ua=${ua}`)
+    .then(res => res.json())
+    .then(res => {
+      showLoading(false); 
+      if(res.status === "success") { 
+        curRider = res.rider; 
+        localStorage.setItem('kukami_session', JSON.stringify(curRider)); 
+        initDashboard(); 
+      } else alert("Akses Ditolak!"); 
+    })
+    .catch(() => { showLoading(false); alert("Koneksi Gagal!"); });
+}
 
     // DASHBOARD DATA (SMART-SHEET ENGINE) - FULL VERSION
     function initDashboard() {
@@ -29,13 +42,15 @@
       document.getElementById('app-content').style.display = 'block';
       showLoading(true);
       
-      google.script.run.withSuccessHandler(res => {
-        showLoading(false);
-        if(!res) return;
+     fetch(`${WEB_APP_URL}?action=getDashboard&id=${curRider.id}`)
+    .then(res => res.json())
+    .then(res => {
+      showLoading(false);
+      if(!res) return;
 
         // 1. Logic Icon Performa (Opsi 2)
         // --- LOGIKA MAPPING ICON + ANIMASI ---
-        const perfMap = {
+         perfMap = {
           "TOP PERFORM": { icon: "💎", class: "anim-diamond" },
           "TOP PERFORMER": { icon: "💎", class: "anim-diamond" },
           "PERFORM": { icon: "🛡️", class: "" }, // Stabil, tidak perlu animasi
@@ -44,11 +59,11 @@
           "UNDERPERFORMER": { icon: "🚨", class: "anim-red" }
         };
 
-        const statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
-        const dataPerf = perfMap[statusRider] || { icon: "👤", class: "" };
+         statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
+         dataPerf = perfMap[statusRider] || { icon: "👤", class: "" };
 
         // Tampilkan dengan class animasi yang sesuai
-        const badgeHtml = `<span class="perf-icon ${dataPerf.class}">${dataPerf.icon}</span>`;
+         badgeHtml = `<span class="perf-icon ${dataPerf.class}">${dataPerf.icon}</span>`;
         document.getElementById('r-nama').innerHTML = `${curRider.nama} ${badgeHtml}`;
         
         // 3. TAMPILKAN SALDO & FOTO
@@ -77,7 +92,7 @@
           renderRiwayat(res.riwayat);
         }
         
-        const cats = [...new Set(masterTarif.map(x => x.kategori))];
+         cats = [...new Set(masterTarif.map(x => x.kategori))];
         if (cats.length > 0) {
           document.getElementById('cat-list').innerHTML = cats.map(cat => 
             `<div class="chip" onclick="renderGrid('${cat}')">${cat}</div>`).join('');
@@ -93,7 +108,7 @@
 
     // TARIF GRID
     function renderGrid(cat) { 
-      const f = masterTarif.filter(x => x.kategori === cat); 
+       f = masterTarif.filter(x => x.kategori === cat); 
       document.getElementById('grid-list').innerHTML = f.map(i => `
         <div class="service-card" onclick="hitService('${i.layanan}', ${i.nominal}, ${i.potongan})">
           <b>${i.layanan}</b><span>Rp ${Number(i.nominal).toLocaleString()}</span>
@@ -102,11 +117,11 @@
 
   // --- UPDATE: Fungsi Hit Service dengan Logika Bypass HP ADMIN ---
 function hitService(ket, nom) { 
-  const ketUpper = ket.toUpperCase();
+   ketUpper = ket.toUpperCase();
   
   // Cari data asli di masterTarif untuk mendapatkan nilai potongan
-  const itemData = masterTarif.find(t => t.layanan.toUpperCase() === ketUpper);
-  const pot = itemData ? itemData.potongan : 0;
+   itemData = masterTarif.find(t => t.layanan.toUpperCase() === ketUpper);
+   pot = itemData ? itemData.potongan : 0;
 
   // RULE KHUSUS HP ADMIN (Paksa Nominal 10.000 dan Potongan 20%)
   let nominalFix = (ketUpper.includes("HP ADMIN")) ? 10000 : nom;
@@ -131,9 +146,9 @@ function hitService(ket, nom) {
     function openKetManual() { if(getAngka(curNomStr) <= 0) return toast("⚠️ Isi Nominal!"); document.getElementById('m-ket-manual').style.display = 'block'; }
 
     function submitKetManual() {
-      const inputKet = document.getElementById('m-input-ket');
-      const ketRaw = inputKet.value.trim();
-      const ket = ketRaw.toLowerCase();
+       inputKet = document.getElementById('m-input-ket');
+       ketRaw = inputKet.value.trim();
+       ket = ketRaw.toLowerCase();
       if (!ketRaw) return toast("⚠️ Isi keterangan belanja!");
       document.getElementById('m-ket-manual').style.display = 'none';
 
@@ -142,7 +157,7 @@ function hitService(ket, nom) {
         pendingItem = { ket: "HP ADMIN", nominal: 10000, qty: 1, potongan: 0.2 };
         executeAddToCart();
       } else {
-        const isRev = ["ongkir", "ongkos", "tarif", "tarip", "fee", "jasa"].some(k => ket.includes(k));
+         isRev = ["ongkir", "ongkos", "tarif", "tarip", "fee", "jasa"].some(k => ket.includes(k));
         pendingItem = { ket: ketRaw.toUpperCase(), nominal: getAngka(curNomStr), qty: 1, potongan: isRev ? 0.2 : 0 };
         if (isRev) {
           document.getElementById('confirm-msg').innerHTML = "Layanan '" + ketRaw + "' memotong komisi 20%.";
@@ -178,31 +193,29 @@ function hitService(ket, nom) {
     function closeConfirm() { document.getElementById('m-confirm').style.display = 'none'; pendingItem = null; }
 
     // --- UPDATE: Fungsi Final Process agar bisa menerima data Bypass ---
+// Contoh untuk Final Process
 function finalProcess(tipe, overrideItems) {
   const itemsToSubmit = overrideItems || cart;
-  
   if (itemsToSubmit.length === 0) return toast("⚠️ Keranjang kosong!");
-
-  document.getElementById('m-cart').style.display = 'none'; 
   showLoading(true);
-  
-  google.script.run.withSuccessHandler(res => { 
-    showLoading(false); 
-    toast("✅ Berhasil!"); 
-    const itemsCopy = JSON.parse(JSON.stringify(itemsToSubmit));
-    
-    // Reset keranjang hanya jika bukan bypass
-    if (!overrideItems) { cart = []; renderCart(); }
-    
-    initDashboard(); 
-    showStruk(res, itemsCopy); 
-  }).simpanTransaksi({ 
+
+  const payload = { 
     idRider: curRider.id, 
     namaRider: curRider.nama,
     items: itemsToSubmit, 
     tipe: tipe, 
     deviceInfo: navigator.userAgent 
-  });
+  };
+
+  fetch(`${WEB_APP_URL}?action=saveTrx&data=${encodeURIComponent(JSON.stringify(payload))}`)
+    .then(res => res.json())
+    .then(res => {
+      showLoading(false);
+      toast("✅ Berhasil!");
+      if (!overrideItems) { cart = []; renderCart(); }
+      initDashboard();
+      showStruk(res, payload.items);
+    });
 }
 
     // STRUK - FINAL VERSION WITH Rp DETAIL
