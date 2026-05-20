@@ -312,7 +312,7 @@
             if(debug) debug.innerText = "✅ AKSES DITERIMA!";
             curRider = res.rider;
             try { localStorage.setItem('kukami_session', JSON.stringify(curRider)); } catch(e) {}
-            initDashboard();
+            ();
           } else if (res && res.status === "device_locked") {
             if(debug) debug.innerText = "❌ AKSES DITOLAK: DEVICE TERKUNCI";
             toast("🔒 <b>Akses Ditolak!</b> Akun terkunci di perangkat lain."); 
@@ -341,31 +341,38 @@
           document.getElementById('r-nama').innerText = curRider.nama.toUpperCase();
           document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
 
-          // 2. Set Status / Kelas di Bawah Nama
+          // 2. Set Status / Kelas di Bawah Nama (TANPA ANIMASI)
           var statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
           var elKelas = document.getElementById('r-kelas');
           
           if (statusRider.indexOf("TOP") !== -1) {
             elKelas.innerHTML = "⭐ " + statusRider;
             elKelas.style.color = "#FFD700"; // Gold
-            elKelas.className = "anim-diamond";
+            elKelas.className = ""; // <-- Animasi dihapus
           } else if (statusRider.indexOf("UNDER") !== -1) {
             elKelas.innerHTML = "🚨 " + statusRider;
             elKelas.style.color = "#ff4d4d"; // Merah
-            elKelas.className = "anim-red";
+            elKelas.className = ""; // <-- Animasi dihapus
           } else {
             elKelas.innerHTML = "🛡️ " + (statusRider || "PERFORMER");
             elKelas.style.color = "#ffffff"; // Putih bersih
             elKelas.className = "";
           }
 
-          // 3. Rakit Teks Panjang untuk Premium Ticker
+          // 3. Rakit Teks Panjang untuk Premium Ticker (FULL RANKING)
           var h = res.stats.hari || {};
           var b = res.stats.bulan || {};
-          var tickerText = "HARI INI: Tot " + (h.total||0) + " #" + (h.rank_tot||"-") + " (ON: " + (h.on||0) + " | OFF: " + (h.off||0) + ")   •   ";
-          tickerText += "BULAN INI: Tot " + (b.total||0) + " #" + (b.rank_tot||"-") + " (ON: " + (b.on||0) + " | OFF: " + (b.off||0) + ")   •   TETAP SEMANGAT DAN HATI-HATI DI JALAN! 🚀";
+          
+          var tickerText = "HARI INI: Tot " + (h.total||0) + " #" + (h.rank_tot||"-") + 
+                           " (ON: " + (h.on||0) + " #" + (h.rank_on||"-") + 
+                           " | OFF: " + (h.off||0) + " #" + (h.rank_off||"-") + ")   •   ";
+                           
+          tickerText += "BULAN INI: Tot " + (b.total||0) + " #" + (b.rank_tot||"-") + 
+                        " (ON: " + (b.on||0) + " #" + (b.rank_on||"-") + 
+                        " | OFF: " + (b.off||0) + " #" + (b.rank_off||"-") + ")   •   TETAP SEMANGAT DAN HATI-HATI DI JALAN! 🚀";
           
           document.getElementById('r-ticker').innerText = tickerText;
+          
           masterTarif = res.listTarif || [];
           if (res.rekening) { curRider.rekening = res.rekening; }
 
