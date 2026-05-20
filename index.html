@@ -1,92 +1,851 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KUKAMI APP</title>
-
-<style>
-body{font-family:Inter;background:#f5f5f5;margin:0}
-.page{padding:20px}
-.hidden{display:none}
-.box{background:#fff;padding:20px;border-radius:16px;max-width:420px;margin:auto}
-input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #ddd}
-button{width:100%;padding:14px;border:0;border-radius:10px;background:#6f0000;color:#fff;font-weight:bold}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;600;700;800&family=Roboto:wght@400&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    /* KUKAMI SUPERAPP v2.0 - SUPER LOCK UI - CSS INDAH TERKUNCI MATI */
+    :root { --maroon: #800000; --navy: #000080; --gold: #D4AF37; --bg: #E5E5E5; --white: #fff; --grey: #888; --green: #28a745; --light-grey: #ccc; }
+    body { font-family: sans-serif; margin: 0; background: var(--bg); user-select: none; padding-bottom: constant(safe-area-inset-bottom); padding-bottom: env(safe-area-inset-bottom); padding-bottom: 90px; }
+    .page { display: none; padding: 15px; } .active { display: block; }
+    .rank-hl { background: yellow; color: #000; padding: 0 4px; border-radius: 4px; font-weight: 900; font-size: 10px; margin-left: 2px; }
+    .chip { display: flex; align-items: center; justify-content: center; text-align: center; min-width: 100px; padding: 10px 15px; background: #D1D1D1; border-radius: 12px; font-size: 11px; font-weight: 900; color: #444; cursor: pointer; border: 1px solid #ccc; line-height: 1.2; white-space: normal; }
+    .hl-tag { padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; margin-right: 5px; }
+    .hl-online { background: var(--navy); color: white; }
+    .hl-offline { background: var(--maroon); color: white; }
+    .hl-hp { background: var(--navy); color: white; }
+    .hl-topup { background: var(--green); color: white; }
+    .item-r { display: flex; justify-content: space-between; padding: 12px; background: #fff; margin-bottom: 6px; border-radius: 10px; border-left: 4px solid var(--maroon); align-items: flex-start; }
+    .date-separator { display: flex; align-items: center; margin: 20px 0 10px; gap: 10px; }
+    .date-separator span { font-size: 12px; font-weight: 900; color: white; background: var(--navy); padding: 4px 15px; border-radius: 20px; }
+    .date-line { flex: 1; height: 1px; background: var(--navy); opacity: 0.3; }
+    .btn { background: var(--maroon); color: white; border: none; width: 100%; padding: 16px; border-radius: 50px; font-weight: 800; cursor: pointer; }
+    input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 14px; outline: none; box-sizing: border-box; }
+    .tab-btn { flex:1; padding:12px; border:none; border-radius:12px; font-weight:bold; cursor:pointer; font-size: 12px; }
+    .tab-active { background: var(--maroon) !important; color: white !important; }
+    .tab-inactive { background: #D1D1D1 !important; color: #666 !important; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+    .nav-item { flex: 1; text-align: center; color: #bbb; font-size: 11px; font-weight: 800; cursor: pointer; }
+    .nav-item.active { color: var(--maroon); }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; }
+    .m-content { background: white; width: 85%; margin: 10% auto; padding: 20px; border-radius: 20px; text-align: center; overflow: hidden; }
+    #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); z-index:30000; flex-direction:column; align-items:center; justify-content:center; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .card-profile { background: var(--maroon); color: white; padding: 15px; border-radius: 15px; border-left: 8px solid var(--gold); margin-bottom: 12px; }
+    .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .service-card { background: white; padding: 12px; border-radius: 12px; border-bottom: 4px solid #ddd; cursor: pointer; }
+    .service-card b { display: block; font-size: 10px; color: #333; margin-bottom: 4px; text-transform: uppercase; height: 24px; overflow: hidden; }
+    .service-card span { font-size: 14px; font-weight: 900; color: var(--maroon); }
+    .cart-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+    .qty-btn { background: #eee; border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; }
+    #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 40000; width: 85%; pointer-events: none; }
+    .toast { background: rgba(0,0,0,0.85); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; text-align: center; border-left: 5px solid var(--gold); }
+    .rank-badge { padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: #000; display: inline-block; margin-left: 4px; vertical-align: middle; }
+    .bg-rank-hari-top { background: linear-gradient(to right, #FFD700, #FFA500); }
+    .bg-rank-bulan-top { background: #FFFF00; }
+    .bg-rank-grey { background: #E5E7EB; color: #4B5563; }
+    .label-wrapper { display: inline-block; width: 85px; font-weight: bold; }
+    .perf-icon { display: inline-block; font-size: 14px; margin-left: 4px; line-height: 1; vertical-align: 4px; position: relative; top: 0px; }
+    #r-nama { display: flex; align-items: center; margin: 0 0 5px 0; line-height: 1.2; flex-wrap: nowrap; }
+    @keyframes shine { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes pulse-red { 0% { transform: scale(1); filter: drop-shadow(0 0px red); } 50% { transform: scale(1.2); filter: drop-shadow(0 5px red); } 100% { transform: scale(1); filter: drop-shadow(0 0px red); } }
+    .anim-diamond { animation: shine 2s infinite ease-in-out; }
+    .anim-red { animation: pulse-red 1.5s infinite; }
+  </style>
 </head>
-
 <body>
+  <div id="toast-container"></div>
+  <div id="loader"><div style="border:4px solid #f3f3f3; border-top:4px solid var(--maroon); border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite;"></div></div>
 
-<div id="loginPage" class="page">
-  <div class="box">
-    <h2>KUKAMI LOGIN</h2>
-
-    <input id="username" placeholder="Username">
-    <input id="pin" type="password" placeholder="PIN">
-
-    <button onclick="login()">LOGIN</button>
-
-    <p id="msg" style="color:red"></p>
+  <div id="p-login" class="page active">
+    <div style="text-align:center; margin-top:80px; margin-bottom:20px;"><div style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:42px;letter-spacing:-3px;"><span style="color:var(--maroon);">KU</span><span style="color:var(--navy);">KAMI</span></div><span style="font-family:'Roboto',sans-serif;font-size:13px;letter-spacing:11.5px;text-indent: 8px;text-transform:lowercase;display:block;">delivery</span></div>
+    <div id="debug-layar" style="background:var(--maroon); color:var(--gold); padding:10px; font-weight:bold; font-size:12px; border-radius:10px; margin-bottom:10px; border:1px solid var(--gold); text-align:center;">API ENGINE ACTIVE - GITHUB MODE</div>
+    <div style="padding: 20px;"><input type="text" id="user" placeholder="Nama Rider"><input type="password" id="pin" placeholder="PIN" inputmode="numeric"><button class="btn" onclick="prosesLogin()">MASUK</button></div>
   </div>
-</div>
 
-<div id="dashboard" class="page hidden">
-  <div class="box">
-    <h2 id="nama">Dashboard</h2>
-    <p id="saldo"></p>
+  <div id="app-content" style="display:none; padding-top: 15px;">
+    <div id="p-home" class="page active">
+      <div class="card-profile">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img id="r-foto" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee;">
+          <div style="flex:1;">
+  <h3 id="r-nama" style="margin:0; font-size:15px; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);"></h3>
+  
+  <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-top: 6px; line-height: 1.4; font-family: 'Inter', sans-serif;">
+    <div style="display: flex; justify-content: space-between; padding-bottom: 0px; margin-bottom: 0px;">
+      <div>
+        <span style="display:inline-block; width:52px; font-weight: 800; color: #FFD700;">HARI INI</span>: 
+        <b id="h-trip">0</b> <span style="color:#FFD700">#<span id="h-rank">-</span></span> 
+        (ON: <b id="h-on">0</b> <span style="color:#FFD700">#<span id="h-rank-on">-</span></span> | 
+        OFF: <b id="h-off">0</b> <span style="color:#FFD700">#<span id="h-rank-off">-</span></span>)
+      </div>      
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+      <div>
+        <span style="display:inline-block; width:52px; font-weight: 800; color: #FFD700;">BULAN INI</span>: 
+        <b id="b-trip">0</b> <span style="color:#FFD700">#<span id="b-rank">-</span></span> 
+        (ON: <b id="b-on">0</b> <span style="color:#FFD700">#<span id="b-rank-on">-</span></span> | 
+        OFF: <b id="b-off">0</b> <span style="color:#FFD700">#<span id="b-rank-off">-</span></span>)
+      </div>      
+    </div>
   </div>
-</div>
+  </div>
+          <div style="text-align:right;">
+            <small style="font-size:10px; color:var(--gold); font-weight:bold;">SALDO</small><br>
+            <span id="r-saldo" style="font-weight:bold; font-size:14px;">Rp 0</span>
+            <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; margin-left:5px; font-weight:bold;">+</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:15px;"><button id="tb1" class="tab-btn tab-active" onclick="setSubTab(1)">MANUAL</button><button id="tb2" class="tab-btn tab-inactive" onclick="setSubTab(2)">TARIF</button></div>
+      
+      <div id="f-manual">
+        <input type="text" id="m-nom" placeholder="Rp 0" readonly style="background:#fff; font-weight:bold; font-size:24px; text-align:right; border:1px solid #ddd;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px;">
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('1')">1</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('2')">2</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('3')">3</div>
+          <div style="grid-row: span 3; background: var(--maroon); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; border-radius: 12px;" onclick="openKetManual()">🛒</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('4')">4</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('5')">5</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('6')">6</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('7')">7</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('8')">8</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('9')">9</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('000')">000</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center;" onclick="pressNum('0')">0</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center; color:red;" onclick="pressNum('C')">C</div>
+          <div style="background:white; border:1px solid #ddd; padding:15px 0; border-radius:12px; font-size:18px; font-weight:800; text-align:center; color:red;" onclick="pressNum('⌫')">⌫</div>
+        </div>
+      </div>
+      <div id="f-tarif" style="display:none;"><div id="cat-list" style="display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; margin-bottom:15px;"></div><div id="grid-list" class="service-grid"></div></div>
+    </div>
+    <div id="p-riwayat" class="page"><div id="list-riwayat"></div></div>
+    <div class="bottom-nav">
+      <div id="n-home" class="nav-item active" onclick="switchMainTab('home')">HOME</div>
+      <div id="n-riwayat" class="nav-item" onclick="switchMainTab('riwayat')">RIWAYAT</div>
+      <div class="nav-item" onclick="logout()">LOGOUT</div>
+    </div>
+  </div>
 
-<script>
+  <div id="cart-float" style="display:none; position:fixed; bottom:95px; left:20px; right:20px; z-index:900;">
+    <div style="background: var(--green) !important; border: 2px solid var(--white); box-shadow: 0 4px 10px rgba(0,0,0,0.2); padding:12px 20px; border-radius:50px; display:flex; justify-content:space-between; align-items:center; font-weight:bold; color:white;" onclick="showCart()">
+      <span>🛒 <span id="c-qty">0</span> ITEM</span><span id="c-total">Rp 0</span>
+    </div>
+  </div>
 
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzAEqfxIp32-C_dNih-XGUikWFxHKG6oKOyKFljrtaE4YLygjPZHd5q3-RHU_PxjssvKw/exec";
+  <div id="m-cart" class="modal"><div class="m-content"><h3>KERANJANG</h3><div id="c-list" style="text-align:left;"></div><hr><div style="display:flex; gap:10px;"><button class="btn" onclick="finalProcess('Online')" style="background:#007bff; flex:1;">ONLINE</button><button class="btn" onclick="finalProcess('Offline')" style="background:#dc3545; flex:1;">OFFLINE</button></div><button class="btn" onclick="tutupKeranjang()" style="background:#666; margin-top:10px;">BATAL</button></div></div>
+  <div id="m-alert" class="modal" style="display:none; z-index:15000; background:rgba(0,0,0,0.85);"><div class="m-content" style="border:2px solid var(--gold); padding:0; width:85%;"><div style="background:var(--maroon); color:var(--gold); padding:15px; font-weight:900;">⚠️ PERIKSA KERANJANG</div><div style="padding:20px; font-weight:bold; color:#333;">Mohon di cek kembali ada tarif atau fee tambahan yang lebih dari 1 QTY!</div><div style="padding:0 20px 20px 20px;"><button class="btn" onclick="tutupAlert()" style="background:var(--maroon); color:var(--gold);">OK, SAYA MENGERTI</button></div></div></div>
+  <div id="m-confirm" class="modal"><div class="m-content"><h3>Konfirmasi</h3><p id="confirm-msg"></p><div style="display:flex; gap:10px;"><button class="btn" onclick="executeAddToCart()" style="background:#28a745; flex:1;">LANJUTKAN</button><button class="btn" onclick="closeConfirm()" style="background:#dc3545; flex:1;">BATAL</button></div></div></div>
+  <div id="m-ket-manual" class="modal"><div class="m-content"><h3 style="margin-top:0; color:var(--maroon);">Keterangan Belanja</h3><input type="text" id="m-input-ket" placeholder="Contoh: Nasi Goreng Pak Jo" autocomplete="off"><button class="btn" onclick="submitKetManual()" style="background: #28a745;">TAMBAH KE KERANJANG</button><button class="btn" onclick="document.getElementById('m-ket-manual').style.display='none'" style="background:#666; margin-top:10px;">BATAL</button></div></div>
+  
+  <div id="m-topup" class="modal">
+    <div class="m-content">
+      <h3>TOP UP</h3>
+      <input type="text" id="u-nom" placeholder="Nominal Rp" inputmode="numeric">
+      <select id="u-met" onchange="cekMetodeTopUp()">
+        <option value="" disabled selected>-- Pilih Metode Pembayaran --</option>
+        <option value="BCA Jimmy Irmansyah">BCA Jimmy Irmansyah</option>
+        <option value="DANA">DANA</option>
+        <option value="BSI">BSI</option>
+        <option value="OVO">OVO</option>
+        <option value="GOPAY">GOPAY</option>
+        <option value="LAIN LAIN">LAIN LAIN</option>
+      </select>
+      <div id="container-ket-lainnya" style="display: none; margin-top: 10px; text-align: left; font-family: 'Inter', sans-serif;">
+        <label style="color: var(--maroon); font-weight: bold; font-size: 11px; display: block; margin-bottom: 5px;">DETAIL CASH / DEPO / TRANSFER (WAJIB):</label>
+        <textarea id="u-ket-lainnya" placeholder="Jelaskan di sini, misal: TOP UP CASH di CS Depo A, atau Depo dari CS transfer ke admin, dll..." style="width: 100%; height: 75px; border-radius: 12px; padding: 10px; border: 1px solid #ccc; font-size: 12px; resize: none; box-sizing: border-box; outline: none; font-family: inherit;"></textarea>
+      </div>
+      <button class="btn" onclick="saveTopUp()" style="background:#28a745; margin-top:15px;">KIRIM</button>
+      <button class="btn" onclick="document.getElementById('m-topup').style.display='none'" style="background:#666; margin-top:10px;">BATAL</button>
+    </div>
+  </div>
 
-let rider = null;
+  <div id="m-struk" class="modal" style="background: white; overflow-y: auto;">
+    <div id="struk-area" style="width: 300px; margin: 0 auto; padding: 40px 25px; color: #000; background: white; font-family: 'Inter', sans-serif; box-sizing: border-box;">
+      <div style="text-align: center;">
+        <div style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:40px;letter-spacing:-2px;"><span style="color:var(--maroon);">KU</span><span style="color:var(--navy);">KAMI</span></div>
+        <span style="font-family:'Roboto',sans-serif;font-size:9px;letter-spacing:8px;text-indent: 8px;text-transform:lowercase;display:block;">delivery</span>
+        <div style="font-size: 8px; color: #333; margin-top: 10px; line-height: 1.4; font-weight: 600;">
+          Admin 1 : 081220774717<br>
+          Admin 2 : 089630042391
+        </div>
+      </div>
+      <div style="border-bottom: 1px dashed #000; margin: 12px 0;"></div>
+      <div style="font-size:10px; margin-bottom:15px; line-height: 1.2; color: #444; font-family: 'Inter', sans-serif;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; margin-bottom: 3px;">
+          <span>Nama Rider</span><span id="s-rider" style="font-weight: bold; color: #000;">-</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; margin-bottom: 3px;">
+          <span>No. Nota</span><span id="s-inv" style="color: #000;">-</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 2px; margin-bottom: 3px;">
+          <span>Tipe Order</span><span id="s-tipe" style="font-weight: bold; color: #000; text-transform: uppercase;">-</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-bottom: 2px;">
+          <span>Waktu</span><span id="s-tgl" style="color: #000;">-</span>
+        </div>
+      </div>
+      <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
+      <div style="text-align: center; font-size: 14px;">### LUNAS ###</div>
+      <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
+      <div id="s-items" style="font-size: 10px;"></div>
+      <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
+      <div style="display: flex; justify-content: space-between; align-items: center;"><span style="font-weight: bold; font-size: 12px;">TOTAL:</span><span id="s-total" style="background-color: #FFD700; color: #000; font-weight: 900; font-size: 12px; padding: 2px 10px; border-radius: 4px;">Rp 0</span></div>
+      <div style="border-bottom: 1px dashed #000; margin: 10px 0;"></div>
+      <div style="text-align: center; margin-top: 15px; font-size: 11px; font-family: sans-serif; font-style: italic;">Jazakumullohu Khoiron Katsiron</div>
+      <div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc;">
+        <p style="margin: 0 0 5px 0; font-size: 10px; color: #666; font-weight: bold;">SCAN UNTUK RATING LAYANAN</p>
+        <div id="struk-qrcode" style="width: 150px; height: 150px; margin: 0 auto; background: #fff;"></div>
+      </div>
+    </div>
+    <div style="padding: 15px 20px; display: flex; flex-direction: column; gap: 10px; background: #E5E5E5;">
+      <div style="display: flex; gap: 10px;"><button class="btn" style="background: #5d0000; flex: 1;" onclick="printStruk()">SIMPAN</button><button class="btn" style="background: #25D366; flex: 1;" onclick="shareStruk()">KIRIM STRUK</button></div>
+      <div id="area-tombol-cancel-kukami">
+        <button type="button" onclick="tampilkanFormCancel()" style="background:#CE1212; color:white; border:none; width:100%; padding:14px; border-radius:50px; font-weight:bold; font-size:14px; cursor:pointer; margin-top:5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+          ⚠️ AJUKAN PEMBATALAN STRUK
+        </button>
+      </div>
+      <div id="container-form-cancel" style="display:none; margin-top:5px; padding:15px; background:#f9f9f9; border:1px solid #ddd; border-radius:15px; text-align:left;">
+        <label style="font-size:12px; font-weight:bold; color:var(--maroon); display:block; margin-bottom:6px;">ALASAN PEMBATALAN (WAJIB):</label>
+        <textarea id="input-alasan-cancel" placeholder="Contoh: Salah input nominal tarif / Konsumen batalkan pesanan di tempat..." style="width:100%; height:75px; padding:10px; border:1px solid #ccc; border-radius:10px; font-size:13px; resize:none; box-sizing:border-box; outline:none; font-family:inherit;"></textarea>
+        <button type="button" onclick="kirimPengajuanCancel(document.getElementById('s-inv').innerText)" style="background:var(--maroon); color:white; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; font-size:13px; cursor:pointer; margin-top:10px;">
+          KIRIM PERMOHONAN KE ADMIN
+        </button>
+      </div>
+      <button class="btn" onclick="closeStruk()" style="background: #666; width: 100%;">TUTUP</button>
+    </div>
+  </div>
 
-async function login(){
+  <script>
+    // 🔴 BOS BESAR WAJIB ISI URL INI DENGAN LINK DEPLOY "DOPOST" WEB APP GAS YANG BARU!
+    const API_URL = "https://script.google.com/macros/s/AKfycbxmFUFUyIVw7hmF7j8-j8ihdGtT0O0oYtIFuuQvcJwArLgYyNPu4VVX6SQtosa6WHIxJA/exec"; 
 
-  const u = document.getElementById('username').value;
-  const p = document.getElementById('pin').value;
-
-  document.getElementById('msg').innerText = "";
-
-  const url = WEBAPP_URL + "?action=login&u=" + encodeURIComponent(u) + "&p=" + encodeURIComponent(p);
-
-  try {
-
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if(data.status === "success"){
-
-      rider = data.rider;
-
-      document.getElementById('loginPage').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-
-      document.getElementById('nama').innerText = rider.nama;
-      document.getElementById('saldo').innerText = "Saldo: Rp " + rider.saldo;
-
+    // 🚀 MESIN PENGGANTI google.script.run (Super Ringan & Anti-CORS)
+    async function KUKAMI_API(actionName, parameters) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: actionName, params: parameters })
+        });
+        const result = await response.json();
+        if(result.status === "error") throw new Error(result.message);
+        return result.data;
+      } catch (err) {
+        console.error("API Error:", err);
+        throw err;
+      }
     }
 
-    else if(data.status === "device_locked"){
-      document.getElementById('msg').innerText = "Akun terkunci di device lain";
+    var warnedOnce = false;
+    var curRider = {}, masterTarif = [], cart = [], pendingItem = null, curNomStr = "0";
+
+    function getFingerprint() {
+      try {
+        var id = localStorage.getItem('kukami_fp');
+        if (!id) {
+          id = 'ID-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+          localStorage.setItem('kukami_fp', id);
+        }
+        return id;
+      } catch(e) { return "ID-UNKNOWN-" + Math.floor(Math.random() * 10000); }
     }
 
-    else if(data.status === "invalid_credentials"){
-      document.getElementById('msg').innerText = "Username / PIN salah";
+    function formatRibuan(v) { return v.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+    function getAngka(v) { return Number(v.toString().replace(/\./g, "")); }
+
+    function toast(m) {
+      var c = document.getElementById('toast-container');
+      if (!c) return;
+      var d = document.createElement('div');
+      d.className = 'toast';
+      d.innerHTML = m;
+      c.appendChild(d);
+      setTimeout(function() { d.remove(); }, 2500);
     }
 
-    else {
-      document.getElementById('msg').innerText = "Server error";
+    function showLoading(s) {
+      var loader = document.getElementById('loader');
+      if(loader) loader.style.display = s ? 'flex' : 'none';
     }
 
-  } catch(err){
-    document.getElementById('msg').innerText = "Koneksi gagal";
-  }
-}
+    function setSubTab(n) {
+      document.getElementById('f-manual').style.display = (n === 1) ? 'block' : 'none';
+      document.getElementById('f-tarif').style.display = (n === 2) ? 'block' : 'none';
+      document.getElementById('tb1').className = 'tab-btn ' + (n === 1 ? 'tab-active' : 'tab-inactive');
+      document.getElementById('tb2').className = 'tab-btn ' + (n === 2 ? 'tab-active' : 'tab-inactive');
+    }
 
-</script>
+    function switchMainTab(t) {
+      document.getElementById('p-home').style.display = (t === 'home') ? 'block' : 'none';
+      document.getElementById('p-riwayat').style.display = (t === 'riwayat') ? 'block' : 'none';
+      document.getElementById('n-home').className = 'nav-item ' + (t === 'home' ? 'active' : '');
+      document.getElementById('n-riwayat').className = 'nav-item ' + (t === 'riwayat' ? 'active' : '');
+    }
 
+    // 🌟 1. PERUBAHAN FUNGSI LOGIN MENGGUNAKAN API FETCH
+    function prosesLogin() {
+      var debug = document.getElementById('debug-layar');
+      if(debug) debug.innerText = "⏳ MENGHUBUNGKAN CLOUD SERVER...";
+      showLoading(true);
+      
+      var paramLogin = {
+        user: document.getElementById('user').value,
+        pin: document.getElementById('pin').value,
+        fp: getFingerprint(),
+        userAgent: navigator.userAgent
+      };
+
+      KUKAMI_API("loginRider", paramLogin)
+        .then(function(res) {
+          showLoading(false);
+          if (res && res.status === "success") {
+            if(debug) debug.innerText = "✅ AKSES DITERIMA!";
+            curRider = res.rider;
+            try { localStorage.setItem('kukami_session', JSON.stringify(curRider)); } catch(e) {}
+            initDashboard();
+          } else if (res && res.status === "device_locked") {
+            if(debug) debug.innerText = "❌ AKSES DITOLAK: DEVICE TERKUNCI";
+            toast("🔒 <b>Akses Ditolak!</b> Akun terkunci di perangkat lain."); 
+          } else {
+            if(debug) debug.innerText = "❌ PIN ATAU AKUN SALAH";
+            toast("❌ <b>Akses Ditolak!</b> Akun tidak terdaftar atau PIN salah."); 
+          }
+        })
+        .catch(function(err) {
+          showLoading(false);
+          if(debug) debug.innerText = "⚠️ SERVER DOWN: " + err.toString();
+          toast("⚠️ <b>Gagal Terhubung:</b> Periksa jaringan internet Anda."); 
+        });
+    }
+
+    // 🌟 2. PERUBAHAN FUNGSI INIT DASHBOARD MENGGUNAKAN API FETCH
+    function initDashboard() {
+      document.getElementById('p-login').style.display = 'none';
+      document.getElementById('app-content').style.display = 'block';
+      showLoading(true);
+      
+      KUKAMI_API("getDashboardData", { id: curRider.id })
+        .then(function(res) {
+          showLoading(false);
+          if (!res) return;
+
+          var perfMap = {
+            "TOP PERFORM": { icon: "💎", className: "anim-diamond" },
+            "TOP PERFORMER": { icon: "💎", className: "anim-diamond" },
+            "PERFORM": { icon: "🛡️", className: "" },
+            "PERFORMER": { icon: "🛡️", className: "" },
+            "UNDERPERFORM": { icon: "🚨", className: "anim-red" },
+            "UNDERPERFORMER": { icon: "🚨", className: "anim-red" }
+          };
+
+          var statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
+          var dataPerf = perfMap[statusRider] || { icon: "👤", className: "" };
+          var badgeHtml = '<span class="perf-icon ' + dataPerf.className + '">' + dataPerf.icon + '</span>';
+          
+          document.getElementById('r-nama').innerHTML = curRider.nama + ' ' + badgeHtml;
+          document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
+          if (res.foto) document.getElementById('r-foto').src = res.foto;
+          
+          document.getElementById('h-trip').innerText = res.stats.hari.total || 0;
+          document.getElementById('h-rank').innerText = res.stats.hari.rank_tot || "-"; 
+          document.getElementById('h-on').innerText = res.stats.hari.on || 0;
+          document.getElementById('h-rank-on').innerText = res.stats.hari.rank_on || "-";
+          document.getElementById('h-off').innerText = res.stats.hari.off || 0;
+          document.getElementById('h-rank-off').innerText = res.stats.hari.rank_off || "-";
+          
+          document.getElementById('b-trip').innerText = res.stats.bulan.total || 0;
+          document.getElementById('b-rank').innerText = res.stats.bulan.rank_tot || "-";
+          document.getElementById('b-on').innerText = res.stats.bulan.on || 0;
+          document.getElementById('b-rank-on').innerText = res.stats.bulan.rank_on || "-";
+          document.getElementById('b-off').innerText = res.stats.bulan.off || 0;
+          document.getElementById('b-rank-off').innerText = res.stats.bulan.rank_off || "-";
+
+          masterTarif = res.listTarif || [];
+          if (res.rekening) { curRider.rekening = res.rekening; }
+
+          if (typeof renderRiwayat === 'function') renderRiwayat(res.riwayat);
+          
+          var seen = {};
+          var cats = [];
+          for (var i = 0; i < masterTarif.length; i++) {
+            var cName = masterTarif[i].kategori;
+            if (!seen[cName]) { seen[cName] = true; cats.push(cName); }
+          }
+
+          if (cats.length > 0) {
+            document.getElementById('cat-list').innerHTML = cats.map(function(cat) {
+              return '<div class="chip" onclick="renderGrid(\'' + cat + '\')">' + cat + '</div>';
+            }).join('');
+            renderGrid(cats[0]);
+          }
+        })
+        .catch(function(err) {
+          showLoading(false);
+          toast("⚠️ Gagal memuat data dashboard.");
+        });
+    }
+
+    function pressNum(v) {
+      if (v === 'C') curNomStr = "0";
+      else if (v === '⌫') curNomStr = curNomStr.length > 1 ? curNomStr.slice(0, -1) : "0";
+      else { if (curNomStr === "0") curNomStr = v; else curNomStr += v; }
+      document.getElementById('m-nom').value = "Rp " + formatRibuan(curNomStr);
+    }
+
+    function renderGrid(cat) {
+      var f = masterTarif.filter(function(x) { return x.kategori === cat; });
+      document.getElementById('grid-list').innerHTML = f.map(function(i) {
+        return '<div class="service-card" onclick="hitService(\'' + i.layanan + '\', ' + i.nominal + ', ' + i.potongan + ')"><b>' + i.layanan + '</b><span>Rp ' + Number(i.nominal).toLocaleString() + '</span></div>';
+      }).join('');
+    }
+
+    function hitService(ket, nom, pot) {
+      var ketUpper = ket.toUpperCase();
+      var nominalFix = ketUpper.indexOf("HP ADMIN") !== -1 ? 10000 : nom;
+      var potonganFix = ketUpper.indexOf("HP ADMIN") !== -1 ? 0.2 : (pot || 0);
+      
+      pendingItem = { ket: ketUpper, nominal: nominalFix, qty: 1, potongan: potonganFix };
+      if (ketUpper.indexOf("HP ADMIN") !== -1) { finalProcess('HP ADMIN', [pendingItem]); } else { executeAddToCart(); }
+    }
+
+    function openKetManual() {
+      if (getAngka(curNomStr) <= 0) return toast("⚠️ Isi Nominal!");
+      document.getElementById('m-ket-manual').style.display = 'block';
+    }
+
+    function submitKetManual() {
+      var inputKet = document.getElementById('m-input-ket');
+      var ketRaw = inputKet.value.trim();
+      var ket = ketRaw.toLowerCase();
+      if (!ketRaw) return toast("⚠️ Isi keterangan belanja!");
+      document.getElementById('m-ket-manual').style.display = 'none';
+
+      if (ket === "hp admin") {
+        pendingItem = { ket: "HP ADMIN", nominal: 10000, qty: 1, potongan: 0.2 };
+        finalProcess('HP ADMIN', [pendingItem]);
+      } else {
+        var keywords = ["ongkir", "ongkos", "tarif", "tarip", "fee", "jasa"];
+        var isRev = false;
+        for (var i = 0; i < keywords.length; i++) {
+          if (ket.indexOf(keywords[i]) !== -1) { isRev = true; break; }
+        }
+        pendingItem = { ket: ketRaw.toUpperCase(), nominal: getAngka(curNomStr), qty: 1, potongan: isRev ? 0.2 : 0 };
+        if (isRev) {
+          document.getElementById('confirm-msg').innerHTML = "Layanan '" + ketRaw + "' memotong komisi 20%.";
+          document.getElementById('m-confirm').style.display = 'block';
+        } else { executeAddToCart(); }
+      }
+      inputKet.value = "";
+    }
+
+    function executeAddToCart() {
+      document.getElementById('m-confirm').style.display = 'none';
+      var idx = -1;
+      for (var i = 0; i < cart.length; i++) { if (cart[i].ket === pendingItem.ket) { idx = i; break; } }
+      if (idx > -1) cart[idx].qty++; else cart.push(pendingItem);
+      
+      try { localStorage.setItem('kukami_cart', JSON.stringify(cart)); } catch(e) {}
+      renderCart(); toast("✅ Ditambah"); curNomStr = "0"; document.getElementById('m-nom').value = "Rp 0";
+    }
+
+    function renderCart() {
+      document.getElementById('cart-float').style.display = cart.length ? 'block' : 'none';
+      var tot = 0;
+      for (var i = 0; i < cart.length; i++) { tot += (cart[i].nominal * cart[i].qty); }
+      document.getElementById('c-qty').innerText = cart.length;
+      document.getElementById('c-total').innerText = "Rp " + tot.toLocaleString();
+      
+      document.getElementById('c-list').innerHTML = cart.map(function(i, idx) {
+        return '<div class="cart-row"><div style="flex:1;"><b>' + i.ket + '</b><br><small>Rp ' + i.nominal.toLocaleString() + '</small></div><div style="display:flex; align-items:center; gap:8px;"><button class="qty-btn" onclick="updateQty(' + idx + ', -1)">-</button><span style="font-weight:bold; min-width:20px; text-align:center;">' + i.qty + '</span><button class="qty-btn" onclick="updateQty(' + idx + ', 1)">+</button><button onclick="removeItem(' + idx + ')" style="border:none;background:none;color:red;font-size:18px;">🗑</button></div></div>';
+      }).join('');
+    }
+
+    function updateQty(idx, d) { 
+      cart[idx].qty += d; 
+      if (cart[idx].qty <= 0) { cart.splice(idx, 1); } 
+      try { localStorage.setItem('kukami_cart', JSON.stringify(cart)); } catch(e) {}
+      renderCart(); 
+    }
+    
+    function removeItem(idx) { 
+      cart.splice(idx, 1); 
+      try { localStorage.setItem('kukami_cart', JSON.stringify(cart)); } catch(e) {}
+      renderCart(); 
+      if (!cart.length) document.getElementById('m-cart').style.display = 'none'; 
+    }
+    
+    function showCart() { document.getElementById('m-cart').style.display = 'block'; renderCart(); setTimeout(cekValidasiQty, 300); }
+    function tutupKeranjang() { document.getElementById('m-cart').style.display = 'none'; }
+    function closeConfirm() { document.getElementById('m-confirm').style.display = 'none'; pendingItem = null; }
+
+    // 🌟 3. PERUBAHAN FUNGSI FINAL PROCESS MENGGUNAKAN API FETCH
+    function finalProcess(tipe, overrideItems) {
+      var itemsToSubmit = overrideItems || cart;
+      if (itemsToSubmit.length === 0) return toast("⚠️ Keranjang kosong!");
+      document.getElementById('m-cart').style.display = 'none';
+      showLoading(true);
+
+      var paramTransaksi = { 
+        idRider: curRider.id, 
+        namaRider: curRider.nama, 
+        items: itemsToSubmit, 
+        tipe: tipe, 
+        deviceInfo: navigator.userAgent 
+      };
+      
+      KUKAMI_API("simpanTransaksi", paramTransaksi)
+        .then(function(res) {
+          showLoading(false);
+          toast("✅ Berhasil!");
+          var itemsCopy = JSON.parse(JSON.stringify(itemsToSubmit));
+          if (!overrideItems) { 
+            cart = []; 
+            try { localStorage.removeItem('kukami_cart'); } catch(e) {}
+            renderCart(); 
+          }
+          initDashboard();
+          
+          if (!res) res = {};
+          res.tipe = tipe; 
+          showStruk(res, itemsCopy, false, "OK");
+        })
+        .catch(function(err) {
+          showLoading(false);
+          toast("⚠️ Gagal menyimpan transaksi.");
+        });
+    }
+
+    function renderRiwayat(data) {
+      var h = '', lastD = '';
+      if (!data || !data.length) return document.getElementById('list-riwayat').innerHTML = '<div style="padding:30px; text-align:center; color:#888;">Belum ada riwayat</div>';
+      
+      data.forEach(function(i, idx) {
+        if (i.tglDisplay !== lastD) { h += '<div class="date-separator"><span>' + i.tglDisplay + '</span><div class="date-line"></div></div>'; lastD = i.tglDisplay; }
+        var tClass = i.tipe.toLowerCase();
+        if (i.ket.toUpperCase().indexOf("HP ADMIN") !== -1) tClass = "hp";
+        if (i.tipe.toUpperCase() === "TOPUP") tClass = "topup";
+        
+        var htmlTagStatus = '<span class="hl-tag hl-' + tClass + '">' + i.tipe + '</span>';
+        var gayaNominalTeks = 'color: var(--maroon); font-weight: bold; font-size: 12px;';
+        var statusMurni = i.status ? i.status.toUpperCase() : "OK";
+
+        if (i.tipe.toUpperCase() !== "TOPUP") {
+          if (statusMurni.indexOf("PENDING CANCEL") !== -1) {
+            htmlTagStatus += '<span class="hl-tag" style="background:#FFA500; color:white;">⏳ MENUNGGU APPROVAL CANCEL</span>';
+          } else if (statusMurni === "CANCELED") {
+            htmlTagStatus += '<span class="hl-tag" style="background:#CE1212; color:white;">❌ CANCELED</span>';
+            gayaNominalTeks += ' text-decoration: line-through; color: #cc0000; opacity: 0.5;';
+          }
+        } else {
+          if (statusMurni === "PENDING") {
+            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#FFA500;">⏳ MENUNGGU APPROVAL TOP UP</span>';
+          } else if (statusMurni === "APPROVED") {
+            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#28a745;">✅ TOP UP APPROVED</span>';
+          }
+        }
+        
+        h += '<div class="item-r" onclick="cetakUlangStruk(' + idx + ', true)" style="cursor: pointer;"><div style="flex: 1; padding-right: 10px; font-size: 10px;"><div style="color: #888; margin-bottom: 3px;">' + i.jam + ' | <span style="font-weight: bold; color: #333;">' + i.id + '</span></div><div style="color: #333; margin-bottom: 5px; line-height: 1.3;">' + i.ket + '</div><div>' + htmlTagStatus + '</div></div><div style="text-align: right; min-width: 85px; padding-top: 2px;"><span style="' + gayaNominalTeks + '">Rp ' + Number(i.nom).toLocaleString() + '</span></div></div>';
+      });
+      document.getElementById('list-riwayat').innerHTML = h;
+      window.globalRiwayatData = data;
+    }
+
+    function cetakUlangStruk(idx, berasalDariRiwayat) {
+      try {
+        var dataSelected = window.globalRiwayatData ? window.globalRiwayatData[idx] : null;
+        if (!dataSelected) return toast("⚠️ Gagal memuat data riwayat.");
+        if (dataSelected.tipe.toUpperCase() === "TOPUP") { return toast("ℹ️ Transaksi Top Up tidak memiliki struk belanja."); }
+        
+        showLoading(true);
+        var rawItems = dataSelected.ket ? dataSelected.ket.split(",") : [];
+        var itemsForStruk = [];
+        
+        rawItems.forEach(function(txt) {
+          var cleanTxt = txt.trim();
+          if (cleanTxt === "") return;
+          var qty = 1, namaBarang = cleanTxt, hargaAsli = 0;
+          if (cleanTxt.indexOf("|") !== -1) {
+            var splitHarga = cleanTxt.split("|");
+            cleanTxt = splitHarga[0].trim();
+            hargaAsli = Number(splitHarga[1]) || 0;
+          }
+          if (cleanTxt.indexOf("x ") !== -1) { 
+            var parts = cleanTxt.split("x "); 
+            qty = Number(parts[0]) || 1; namaBarang = parts[1] || cleanTxt; 
+          } else if (cleanTxt.indexOf("x") !== -1) { 
+            var parts = cleanTxt.split("x"); 
+            qty = Number(parts[0]) || 1; namaBarang = parts[1] || cleanTxt; 
+          }
+          itemsForStruk.push({ ket: namaBarang.toUpperCase(), qty: qty, nominal: hargaAsli });
+        });
+
+        var resTiruan = { nota: dataSelected.id, total: Number(dataSelected.nom), waktu: dataSelected.jam, tipe: dataSelected.tipe };
+        
+        showLoading(false);
+        showStruk(resTiruan, itemsForStruk, berasalDariRiwayat, dataSelected.status);
+      } catch(err) {
+        showLoading(false); toast("⚠️ Gagal memuat struk.");
+      }
+    }
+
+    function showStruk(res, items, berasalDariRiwayat, statusTransaksi) {
+      document.getElementById('s-inv').innerText = res.nota;
+      document.getElementById('s-rider').innerText = curRider.nama;
+      document.getElementById('s-tipe').innerText = res.tipe ? res.tipe.toUpperCase() : "-";
+      
+      // 🌟 PERUBAHAN PENTING UNTUK LINK QR RATING DI GITHUB
+      var currentUrl = window.location.origin + window.location.pathname;
+      var baseUrl = currentUrl.replace('index.html', '').replace('Index.html', '');
+      if (!baseUrl.endsWith('/')) baseUrl += '/';
+      var linkRatingText = baseUrl + "rating.html?inv=" + encodeURIComponent(res.nota) + "&rider=" + encodeURIComponent(curRider.id);
+      
+      var qrContainer = document.getElementById('struk-qrcode');
+      if (qrContainer) {
+        qrContainer.innerHTML = ""; 
+        new QRCode(qrContainer, { text: linkRatingText, width: 150, height: 150, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.M });
+      }
+  
+      var raw = res.waktu || "";
+      var clean = raw.replace(/WIB/g, "").trim();
+      var finalWaktu = "";
+      if (clean.indexOf("/") !== -1 || clean.indexOf("-") !== -1) { finalWaktu = clean.replace(" ", " | ") + " WIB"; } 
+      else { var d = new Date(); var opsi = { day: 'numeric', month: 'long', year: 'numeric' }; finalWaktu = d.toLocaleDateString('id-ID', opsi) + " | " + clean + " WIB"; }
+      document.getElementById('s-tgl').innerText = finalWaktu;
+      
+      var h = '';
+      if (!items || items.length === 0) {
+        h += '<div style="margin-bottom:10px; font-family: \'Inter\', sans-serif;"><div style="display:flex; justify-content:space-between; font-weight:bold; color:#000;"><span>' + res.tipe.toUpperCase() + '</span><span>Rp ' + res.total.toLocaleString() + '</span></div></div>';
+      } else {
+        items.forEach(function(i) {
+          if (i.nominal > 0) {
+            var subTotalItem = i.nominal * i.qty;
+            h += '<div style="margin-bottom:12px; font-family: \'Inter\', sans-serif;">' +
+                   '<div style="display:flex; justify-content:space-between; font-weight:bold; color:#000; margin-bottom:2px;"><span>' + i.ket + '</span><span>Rp ' + subTotalItem.toLocaleString() + '</span></div>' +
+                   '<div style="font-size:10px; color:#666;">' + i.qty + ' x Rp ' + i.nominal.toLocaleString() + '</div>' +
+                 '</div>';
+          } else {
+            if (items.length === 1) {
+              h += '<div style="margin-bottom:12px; font-family: \'Inter\', sans-serif;"><div style="display:flex; justify-content:space-between; font-weight:bold; color:#000; margin-bottom:2px;"><span>' + i.ket + '</span><span>Rp ' + res.total.toLocaleString() + '</span></div><div style="font-size:10px; color:#666;">' + i.qty + ' x Rp ' + res.total.toLocaleString() + '</div></div>';
+            } else {
+              h += '<div style="margin-bottom:10px; font-family: \'Inter\', sans-serif; font-weight:bold; color:#000; border-bottom: 1px solid #f9f9f9; padding-bottom:4px;"><span>' + i.qty + 'x ' + i.ket + '</span></div>';
+            }
+          }
+        });
+      }
+      
+      document.getElementById('s-items').innerHTML = h;
+      document.getElementById('s-total').innerText = "Rp " + res.total.toLocaleString();
+
+      var areaTombolBatal = document.getElementById('area-tombol-cancel-kukami');
+      var formCancelKukami = document.getElementById('container-form-cancel');
+      var inputAlasanKukami = document.getElementById('input-alasan-cancel');
+      
+      if (formCancelKukami) { formCancelKukami.style.display = 'none'; }
+      if (inputAlasanKukami) { inputAlasanKukami.value = ''; }
+
+      if (areaTombolBatal) {
+        var statUpper = statusTransaksi ? statusTransaksi.toUpperCase() : "OK";
+        if (!berasalDariRiwayat) {
+          areaTombolBatal.style.display = 'none';
+        } else {
+          areaTombolBatal.style.display = 'block';
+          if (statUpper.indexOf("PENDING CANCEL") !== -1) {
+            areaTombolBatal.innerHTML = '<div style="background:#FFA500; color:white; text-align:center; padding:12px; border-radius:12px; font-weight:bold; font-size:12px; margin-top:10px;">⏳ MENUNGGU APPROVAL CANCEL ADMIN</div>';
+          } else if (statUpper === "CANCELED") {
+            areaTombolBatal.innerHTML = '<div style="background:#666; color:white; text-align:center; padding:12px; border-radius:12px; font-weight:bold; font-size:12px; margin-top:10px;">❌ STRUK INI SUDAH DIBATALKAN</div>';
+          } else {
+            areaTombolBatal.innerHTML = '<button type="button" onclick="tampilkanFormCancel()" style="background:#CE1212; color:white; border:none; width:100%; padding:14px; border-radius:50px; font-weight:bold; font-size:14px; cursor:pointer; margin-top:15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">⚠️ AJUKAN PEMBATALAN STRUK</button>';
+          }
+        }
+      }
+      document.getElementById('m-struk').style.display = 'block';
+    }
+
+    function printStruk() {
+      showLoading(true);
+      html2canvas(document.getElementById("struk-area"), { scale: 2, useCORS: true }).then(function(canvas) {
+        showLoading(false);
+        var link = document.createElement('a');
+        link.download = 'STRUK_KUKAMI.png';
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      }).catch(function() { showLoading(false); toast("⚠️ Gagal memproses gambar."); });
+    }
+    
+    // 🌟 4. LOGIKA SHARE OTOMATIS GITHUB & FALLBACK AMAN
+    function shareStruk() {
+      var area = document.getElementById('struk-area');
+      showLoading(true);
+      
+      html2canvas(area, { scale: 2, useCORS: true }).then(function(canvas) {
+        canvas.toBlob(function(blob) {
+          if (!blob) { showLoading(false); toast("⚠️ Gagal memproses Struk."); return; }
+          var file = new File([blob], 'Struk_KUKAMI.png', { type: 'image/png' });
+          var invActive = document.getElementById('s-inv').innerText;
+          
+          var currentUrl = window.location.origin + window.location.pathname;
+          var baseUrl = currentUrl.replace('index.html', '').replace('Index.html', '');
+          if (!baseUrl.endsWith('/')) baseUrl += '/';
+          var longUrl = baseUrl + "rating.html?inv=" + encodeURIComponent(invActive) + "&rider=" + encodeURIComponent(curRider.id);
+
+          var textCaption = "Amanah akan segera disampaikan. Mohon ditunggu ya...\n\n";
+          var nomorRekening = "";
+          if (curRider && curRider.rekening) { nomorRekening = curRider.rekening.toString().trim(); }
+          if (nomorRekening !== "") { textCaption += "Jika ingin transfer bisa ke:\n" + nomorRekening + "\n\n"; }
+          textCaption += "Mohon luangkan waktu 5 detik untuk memberikan penilaian pelayanan Rider kami melalui link resmi KUKAMI di bawah ini:\n👉 " + longUrl;
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file], text: textCaption, title: 'Struk KUKAMI' })
+              .then(function() { showLoading(false); })
+              .catch(function(err) { 
+                showLoading(false); 
+                if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+                   console.error(err); toast("⚠️ Gagal share.");
+                }
+              });
+          } else { 
+            showLoading(false); 
+            // Fallback download
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL("image/png");
+            a.download = 'Struk_KUKAMI.png';
+            a.click();
+            toast("Sistem share ditolak, otomatis mendownload."); 
+          }
+        });
+      }).catch(function(err) { showLoading(false); toast("⚠️ Gagal mencetak gambar."); });
+    }
+
+    function closeStruk() { document.getElementById('m-struk').style.display = 'none'; }
+
+    function tampilkanFormCancel() {
+      var containerForm = document.getElementById('container-form-cancel');
+      if (!containerForm) return;
+      if (containerForm.style.display === 'none' || containerForm.style.display === '') {
+        containerForm.style.display = 'block';
+        containerForm.scrollIntoView({ behavior: 'smooth' });
+      } else { containerForm.style.display = 'none'; }
+    }
+
+    // 🌟 5. PERUBAHAN FUNGSI CANCEL STRUK MENGGUNAKAN API FETCH
+    function kirimPengajuanCancel(idStruk) {
+      var alasanInput = document.getElementById('input-alasan-cancel').value.trim();
+      if (alasanInput.length < 10) { alert("❌ Alasan terlalu pendek! Minimal 10 karakter."); return; }
+      if (!confirm("Apakah Anda yakin ingin mengajukan pembatalan untuk Struk #" + idStruk + "?")) { return; }
+      showLoading(true);
+      
+      KUKAMI_API("ajukanPembatalanStrukRider", { idStruk: idStruk, idRider: curRider.id, alasan: alasanInput })
+        .then(function(res) {
+          showLoading(false);
+          if (res && res.status === "success") {
+            alert("✅ " + res.message);
+            document.getElementById('container-form-cancel').style.display = 'none';
+            var areaTombol = document.getElementById('area-tombol-cancel-kukami');
+            if (areaTombol) { areaTombol.innerHTML = '<div style="background:#FFA500; color:white; text-align:center; padding:12px; border-radius:12px; font-weight:bold; font-size:13px; margin-top:15px;">⏳ MENUNGGU PERSETUJUAN ADMIN</div>'; }
+            initDashboard(); 
+          } else { alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); }
+        })
+        .catch(function(err) {
+          showLoading(false); 
+          alert("❌ Gagal terhubung ke server."); 
+        });
+    }
+
+    function cekMetodeTopUp() {
+      try {
+        var met = document.getElementById('u-met').value;
+        var boxLainnya = document.getElementById('container-ket-lainnya');
+        if (boxLainnya) {
+          if (met === "LAIN LAIN") { boxLainnya.style.display = 'block'; } 
+          else { boxLainnya.style.display = 'none'; document.getElementById('u-ket-lainnya').value = ""; }
+        }
+      } catch(e) {}
+    }
+
+    // 🌟 6. PERUBAHAN FUNGSI TOP UP MENGGUNAKAN API FETCH
+    function saveTopUp() {
+      var nom = getAngka(document.getElementById('u-nom').value);
+      var met = document.getElementById('u-met').value;
+      var ketLainnya = document.getElementById('u-ket-lainnya') ? document.getElementById('u-ket-lainnya').value.trim() : "";
+
+      if (nom <= 0) return toast("⚠️ Isi nominal!");
+      if (!met) return toast("⚠️ Pilih metode!");
+      if (met === "LAIN LAIN" && ketLainnya.length < 5) {
+        alert("❌ Mohon isi penjelasan TOP UP CASH / DEPO secara detail!");
+        return;
+      }
+
+      var metodeFinal = met;
+      if (met === "LAIN LAIN") { metodeFinal = "LAIN LAIN: " + ketLainnya.toUpperCase(); }
+
+      document.getElementById('m-topup').style.display = 'none';
+      showLoading(true);
+
+      KUKAMI_API("requestTopUp", { idRider: curRider.id, nominal: nom, metode: metodeFinal })
+        .then(function() { 
+          initDashboard(); 
+          showLoading(false); 
+          toast("🚀 Terkirim!"); 
+          document.getElementById('u-nom').value = "";
+          document.getElementById('u-met').selectedIndex = 0;
+          if(document.getElementById('container-ket-lainnya')) document.getElementById('container-ket-lainnya').style.display = 'none';
+          if(document.getElementById('u-ket-lainnya')) document.getElementById('u-ket-lainnya').value = "";
+        })
+        .catch(function(err) {
+          showLoading(false);
+          toast("⚠️ Gagal mengirim Top Up.");
+        });
+    }
+
+    function logout() { if (confirm("Logout?")) { localStorage.clear(); location.reload(); } }
+
+    window.onload = function() {
+      var debug = document.getElementById('debug-layar');
+      try {
+        localStorage.setItem('tes_koneksi', 'ok');
+        localStorage.removeItem('tes_koneksi');
+        
+        var s = localStorage.getItem('kukami_session');
+        if (s) { try { curRider = JSON.parse(s); initDashboard(); } catch(e) {} }
+        
+        var savedCart = localStorage.getItem('kukami_cart');
+        if (savedCart) {
+          try {
+            var parsed = JSON.parse(savedCart);
+            if (Array.isArray(parsed) && parsed.length > 0) { cart = parsed; renderCart(); }
+          } catch(e) {}
+        }
+        var elNom = document.getElementById('u-nom');
+        if (elNom) elNom.addEventListener('input', function() { this.value = formatRibuan(this.value); });
+      } catch (error) { if (debug) debug.innerText = "⚠️ MEMORI LOKAL DIBLOKIR SISTEM HP"; }
+    };
+
+    function cekValidasiQty() {
+      var listOngkir = cart.filter(function(i) { return i.ket.toLowerCase().indexOf("ongkir") !== -1; });
+      var totalQtyOngkir = 0;
+      for (var f = 0; f < listOngkir.length; f++) { totalQtyOngkir += listOngkir[f].qty; }
+      var qtyViolators = cart.filter(function(i) { var k = i.ket.toLowerCase(); return i.qty > 1 && k.indexOf("parkir") === -1 && k.indexOf("tambah tempat") === -1; });
+      var doubleOngkir = totalQtyOngkir > 1; var missingOngkir = totalQtyOngkir === 0; var hasQtyViolation = qtyViolators.length > 0;
+      if (doubleOngkir || missingOngkir || hasQtyViolation) {
+        var alertModal = document.getElementById('m-alert'); if(!alertModal) return;
+        var content = alertModal.querySelector('.m-content');
+        content.style.padding = "30px 20px"; content.style.borderRadius = "24px"; content.style.border = "none";
+        var htmlBody = "";
+        if (missingOngkir) htmlBody += '<b style="color:var(--navy);">❌ Layanan ONGKIR belum ada!</b><br>';
+        if (doubleOngkir) htmlBody += '<b style="color:var(--maroon);">⚠️ ONGKIR lebih dari 1 detected!</b> (Total: ' + totalQtyOngkir + ')<br>';
+        if (hasQtyViolation) htmlBody += '<b style="color:var(--maroon);">⚠️ Qty Layanan > 1:</b> ' + qtyViolators.map(function(v) { return v.ket; }).join(', ') + '<br>';
+        content.innerHTML = '<div style="font-size: 50px; margin-bottom: 15px;">⚠️</div><h3 style="margin: 0 0 10px 0; color: #333; font-family: \'Montserrat\', sans-serif; font-weight: 900; font-size: 18px;">CEK KERANJANG!</h3><div style="color: #666; font-size: 13px; line-height: 1.6; margin-bottom: 25px;">' + htmlBody + '<br>Mohon pastikan kembali pesanan Anda sebelum lanjut.</div><button class="btn" onclick="tutupAlert()" style="background: var(--maroon); border-radius: 12px; font-size: 14px; letter-spacing: 1px;">SAYA MENGERTI</button>';
+        alertModal.style.display = 'block';
+      }
+    }
+
+    function tutupAlert() { document.getElementById('m-alert').style.display = 'none'; }
+    function updateRank(id, val, tipe) { var el = document.getElementById(id); if (!el) return; if (!val || val == 0 || val == "") { el.innerHTML = ''; return; } var warna = (val <= 10) ? (tipe === 'hari' ? 'bg-rank-hari-top' : 'bg-rank-bulan-top') : 'bg-rank-grey'; el.innerHTML = '<span class="rank-badge ' + warna + '">#' + val + '</span>'; }
+  </script>
 </body>
 </html>
