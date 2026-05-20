@@ -732,7 +732,7 @@
       } else { containerForm.style.display = 'none'; }
     }
 
-    // 🌟 5. PERUBAHAN FUNGSI CANCEL STRUK MENGGUNAKAN API FETCH
+    // 🌟 5. PERUBAHAN FUNGSI CANCEL STRUK MENGGUNAKAN API FETCH (AUTO-REDIRECT RIWAYAT)
     function kirimPengajuanCancel(idStruk) {
       var alasanInput = document.getElementById('input-alasan-cancel').value.trim();
       if (alasanInput.length < 10) { alert("❌ Alasan terlalu pendek! Minimal 10 karakter."); return; }
@@ -743,12 +743,18 @@
         .then(function(res) {
           showLoading(false);
           if (res && res.status === "success") {
+            // Layar akan berhenti di sini sampai Rider klik "OK"
             alert("✅ " + res.message);
-            document.getElementById('container-form-cancel').style.display = 'none';
-            var areaTombol = document.getElementById('area-tombol-cancel-kukami');
-            if (areaTombol) { areaTombol.innerHTML = '<div style="background:#FFA500; color:white; text-align:center; padding:12px; border-radius:12px; font-weight:bold; font-size:13px; margin-top:15px;">⏳ MENUNGGU PERSETUJUAN ADMIN</div>'; }
+            
+            // 🌟 SUNTIKAN REDIRECT OTOMATIS SETELAH KLIK OK
+            closeStruk(); // 1. Menutup pop-up struk
+            switchMainTab('riwayat'); // 2. Memindahkan layar ke Tab Riwayat
+            
+            // Refresh data di background agar status di Riwayat langsung berubah jadi "Menunggu Approval"
             initDashboard(); 
-          } else { alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); }
+          } else { 
+            alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); 
+          }
         })
         .catch(function(err) {
           showLoading(false); 
