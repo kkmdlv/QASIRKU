@@ -45,22 +45,14 @@
     #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 40000; width: 85%; pointer-events: none; }
     .toast { background: rgba(0,0,0,0.85); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; text-align: center; border-left: 5px solid var(--gold); }
     .rank-badge { padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: #000; display: inline-block; margin-left: 4px; vertical-align: middle; }
-    .bg-rank-hari-top { background: linear-gradient(to right, #FFD700, #FFA500); }
-    .bg-rank-bulan-top { background: #FFFF00; }
-    .bg-rank-grey { background: #E5E7EB; color: #4B5563; }
-    .label-wrapper { display: inline-block; width: 85px; font-weight: bold; }
-    .perf-icon { display: inline-block; font-size: 14px; margin-left: 4px; line-height: 1; vertical-align: 4px; position: relative; top: 0px; }
-    #r-nama { display: flex; align-items: center; margin: 0 0 5px 0; line-height: 1.2; flex-wrap: nowrap; }
-    @keyframes shine { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes pulse-red { 0% { transform: scale(1); filter: drop-shadow(0 0px red); } 50% { transform: scale(1.2); filter: drop-shadow(0 5px red); } 100% { transform: scale(1); filter: drop-shadow(0 0px red); } }
-    .anim-diamond { animation: shine 2s infinite ease-in-out; }
-    .anim-red { animation: pulse-red 1.5s infinite; }
+    
+    /* --- SUNTIKAN UI V2: PREMIUM TICKER & SALDO LOCK --- */
     .saldo-lock { white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
     #r-kelas { font-size: 10px; font-weight: 900; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
     
     .ticker-wrap { width: 100%; background: rgba(0,0,0,0.25); padding: 6px 0; border-radius: 0 0 15px 15px; margin-top: 15px; display: flex; align-items: center; }
     .ticker-label { font-size: 10px; font-weight: 900; color: var(--gold); padding: 0 10px; border-right: 1px solid rgba(255,255,255,0.2); white-space: nowrap; z-index: 2; }
-    .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 20s linear infinite; font-size: 11px; font-weight: 600; color: white; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; }
+    .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 11px; font-weight: 600; color: white; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; }
     @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
   </style>
 </head>
@@ -76,14 +68,15 @@
 
   <div id="app-content" style="display:none; padding-top: 15px;">
     <div id="p-home" class="page active">
+      
       <div class="card-profile" style="padding: 0; padding-top: 15px;"> 
         <div style="display:flex; align-items:center; gap:12px; padding: 0 15px;">
-          <img id="r-foto" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee;">
-          <div style="flex:1; overflow: hidden;">
+          <img id="r-foto" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee; flex-shrink: 0;">
+          <div style="flex:1; overflow: hidden; min-width: 0;">
             <h3 id="r-nama" style="margin:0; font-size:15px; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h3>
             <div id="r-kelas">MEMUAT...</div>
           </div>
-          <div style="text-align:right;">
+          <div style="text-align:right; flex-shrink: 0;">
             <small style="font-size:10px; color:var(--gold); font-weight:bold;">SALDO</small><br>
             <div class="saldo-lock">
               <span id="r-saldo" style="font-weight:bold; font-size:14px;">Rp 0</span>
@@ -99,13 +92,7 @@
           </div>
         </div>
       </div>
-          <div style="text-align:right;">
-            <small style="font-size:10px; color:var(--gold); font-weight:bold;">SALDO</small><br>
-            <span id="r-saldo" style="font-weight:bold; font-size:14px;">Rp 0</span>
-            <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; margin-left:5px; font-weight:bold;">+</button>
-          </div>
-        </div>
-      </div>
+
       <div style="display:flex; gap:10px; margin-bottom:15px;"><button id="tb1" class="tab-btn tab-active" onclick="setSubTab(1)">MANUAL</button><button id="tb2" class="tab-btn tab-inactive" onclick="setSubTab(2)">TARIF</button></div>
       
       <div id="f-manual">
@@ -227,10 +214,8 @@
   </div>
 
   <script>
-    // 🔴 BOS BESAR WAJIB ISI URL INI DENGAN LINK DEPLOY "DOPOST" WEB APP GAS YANG BARU!
-    const API_URL = "https://script.google.com/macros/s/AKfycbzXXbJQkp6KJBbisJVHaV9g5l5x22Oe0Nvaty2i6xVu_69nCiKpNPkHn9zn_sUuEFoybQ/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbzJpOfgfHtT-_IAXbo810GkIC_s-JSU7uVJ1cHeGb8wUWAJXFBif4-hd9hIP-VMUDY4hg/exec"; 
 
-    // 🚀 MESIN PENGGANTI google.script.run (Super Ringan & Anti-CORS)
     async function KUKAMI_API(actionName, parameters) {
       try {
         const response = await fetch(API_URL, {
@@ -292,7 +277,6 @@
       document.getElementById('n-riwayat').className = 'nav-item ' + (t === 'riwayat' ? 'active' : '');
     }
 
-    // 🌟 1. PERUBAHAN FUNGSI LOGIN MENGGUNAKAN API FETCH
     function prosesLogin() {
       var debug = document.getElementById('debug-layar');
       if(debug) debug.innerText = "⏳ MENGHUBUNGKAN CLOUD SERVER...";
@@ -312,7 +296,7 @@
             if(debug) debug.innerText = "✅ AKSES DITERIMA!";
             curRider = res.rider;
             try { localStorage.setItem('kukami_session', JSON.stringify(curRider)); } catch(e) {}
-            ();
+            initDashboard();
           } else if (res && res.status === "device_locked") {
             if(debug) debug.innerText = "❌ AKSES DITOLAK: DEVICE TERKUNCI";
             toast("🔒 <b>Akses Ditolak!</b> Akun terkunci di perangkat lain."); 
@@ -328,7 +312,7 @@
         });
     }
 
-    // 🌟 2. PERUBAHAN FUNGSI INIT DASHBOARD MENGGUNAKAN API FETCH
+    // 🌟 FUNGSI INIT DASHBOARD FULL TANPA ERROR JS
     function initDashboard() {
       document.getElementById('p-login').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
@@ -336,7 +320,10 @@
       
       KUKAMI_API("getDashboardData", { id: curRider.id })
         .then(function(res) {
-         // 1. Set Profil Murni
+          showLoading(false);
+          if (!res) return;
+
+          // 1. Set Profil Murni
           if (res.foto) document.getElementById('r-foto').src = res.foto;
           document.getElementById('r-nama').innerText = curRider.nama.toUpperCase();
           document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
@@ -348,11 +335,11 @@
           if (statusRider.indexOf("TOP") !== -1) {
             elKelas.innerHTML = "⭐ " + statusRider;
             elKelas.style.color = "#FFD700"; // Gold
-            elKelas.className = ""; // <-- Animasi dihapus
+            elKelas.className = "";
           } else if (statusRider.indexOf("UNDER") !== -1) {
             elKelas.innerHTML = "🚨 " + statusRider;
             elKelas.style.color = "#ff4d4d"; // Merah
-            elKelas.className = ""; // <-- Animasi dihapus
+            elKelas.className = "";
           } else {
             elKelas.innerHTML = "🛡️ " + (statusRider || "PERFORMER");
             elKelas.style.color = "#ffffff"; // Putih bersih
@@ -372,7 +359,7 @@
                         " | OFF: " + (b.off||0) + " #" + (b.rank_off||"-") + ")   •   TETAP SEMANGAT DAN HATI-HATI DI JALAN! 🚀";
           
           document.getElementById('r-ticker').innerText = tickerText;
-          
+
           masterTarif = res.listTarif || [];
           if (res.rekening) { curRider.rekening = res.rekening; }
 
@@ -491,7 +478,6 @@
     function tutupKeranjang() { document.getElementById('m-cart').style.display = 'none'; }
     function closeConfirm() { document.getElementById('m-confirm').style.display = 'none'; pendingItem = null; }
 
-    // 🌟 3. PERUBAHAN FUNGSI FINAL PROCESS MENGGUNAKAN API FETCH
     function finalProcess(tipe, overrideItems) {
       var itemsToSubmit = overrideItems || cart;
       if (itemsToSubmit.length === 0) return toast("⚠️ Keranjang kosong!");
@@ -528,6 +514,7 @@
         });
     }
 
+    // 🌟 FUNGSI RENDER RIWAYAT DENGAN LOGIKA STATUS LENGKAP
     function renderRiwayat(data) {
       var h = '', lastD = '';
       if (!data || !data.length) return document.getElementById('list-riwayat').innerHTML = '<div style="padding:30px; text-align:center; color:#888;">Belum ada riwayat</div>';
@@ -550,7 +537,6 @@
             gayaNominalTeks += ' text-decoration: line-through; color: #cc0000; opacity: 0.5;';
           }
         } else {
-          // 🌟 LOGIKA BARU TOP UP: Menunggu Admin ketik "OK" 🌟
           if (statusMurni === "PENDING" || statusMurni === "") {
             htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#FFA500;">⏳ MENUNGGU APPROVAL ADMIN</span>';
           } else if (statusMurni === "OK" || statusMurni === "APPROVED" || statusMurni.indexOf("BERHASIL") !== -1) {
@@ -609,7 +595,6 @@
       document.getElementById('s-rider').innerText = curRider.nama;
       document.getElementById('s-tipe').innerText = res.tipe ? res.tipe.toUpperCase() : "-";
       
-      // 🌟 PERUBAHAN PENTING UNTUK LINK QR RATING DI GITHUB
       var currentUrl = window.location.origin + window.location.pathname;
       var baseUrl = currentUrl.replace('index.html', '').replace('Index.html', '');
       if (!baseUrl.endsWith('/')) baseUrl += '/';
@@ -688,7 +673,6 @@
       }).catch(function() { showLoading(false); toast("⚠️ Gagal memproses gambar."); });
     }
     
-    // 🌟 4. LOGIKA SHARE OTOMATIS GITHUB & FALLBACK AMAN
     function shareStruk() {
       var area = document.getElementById('struk-area');
       showLoading(true);
@@ -721,7 +705,6 @@
               });
           } else { 
             showLoading(false); 
-            // Fallback download
             const a = document.createElement('a');
             a.href = canvas.toDataURL("image/png");
             a.download = 'Struk_KUKAMI.png';
@@ -743,7 +726,7 @@
       } else { containerForm.style.display = 'none'; }
     }
 
-    // 🌟 5. PERUBAHAN FUNGSI CANCEL STRUK MENGGUNAKAN API FETCH (AUTO-REDIRECT RIWAYAT)
+    // 🌟 FUNGSI CANCEL STRUK DENGAN AUTO-REDIRECT
     function kirimPengajuanCancel(idStruk) {
       var alasanInput = document.getElementById('input-alasan-cancel').value.trim();
       if (alasanInput.length < 10) { alert("❌ Alasan terlalu pendek! Minimal 10 karakter."); return; }
@@ -754,18 +737,11 @@
         .then(function(res) {
           showLoading(false);
           if (res && res.status === "success") {
-            // Layar akan berhenti di sini sampai Rider klik "OK"
             alert("✅ " + res.message);
-            
-            // 🌟 SUNTIKAN REDIRECT OTOMATIS SETELAH KLIK OK
-            closeStruk(); // 1. Menutup pop-up struk
-            switchMainTab('riwayat'); // 2. Memindahkan layar ke Tab Riwayat
-            
-            // Refresh data di background agar status di Riwayat langsung berubah jadi "Menunggu Approval"
+            closeStruk();
+            switchMainTab('riwayat');
             initDashboard(); 
-          } else { 
-            alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); 
-          }
+          } else { alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); }
         })
         .catch(function(err) {
           showLoading(false); 
@@ -784,7 +760,7 @@
       } catch(e) {}
     }
 
-    // 🌟 6. PERUBAHAN FUNGSI TOP UP MENGGUNAKAN API FETCH
+    // 🌟 FUNGSI TOP UP DENGAN AUTO-REDIRECT
     function saveTopUp() {
       var nom = getAngka(document.getElementById('u-nom').value);
       var met = document.getElementById('u-met').value;
@@ -803,21 +779,16 @@
       document.getElementById('m-topup').style.display = 'none';
       showLoading(true);
 
-      // Pastikan namaRider ikut dikirim ke backend
       KUKAMI_API("requestTopUp", { idRider: curRider.id, namaRider: curRider.nama, nominal: nom, metode: metodeFinal })
         .then(function() { 
           showLoading(false); 
-          
-          // 1. Munculkan Notifikasi Sukses (Menahan layar sampai diklik OK)
           alert("✅ Pengajuan TOP UP berhasil dikirim ke sistem. Menunggu approval Admin.");
           
-          // 2. Kosongkan Form Top Up
           document.getElementById('u-nom').value = "";
           document.getElementById('u-met').selectedIndex = 0;
           if(document.getElementById('container-ket-lainnya')) document.getElementById('container-ket-lainnya').style.display = 'none';
           if(document.getElementById('u-ket-lainnya')) document.getElementById('u-ket-lainnya').value = "";
           
-          // 3. 🌟 PINDAH OTOMATIS KE RIWAYAT & REFRESH DATA 🌟
           switchMainTab('riwayat');
           initDashboard(); 
         })
