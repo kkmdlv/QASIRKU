@@ -542,10 +542,13 @@
             gayaNominalTeks += ' text-decoration: line-through; color: #cc0000; opacity: 0.5;';
           }
         } else {
-          if (statusMurni === "PENDING") {
-            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#FFA500;">⏳ MENUNGGU APPROVAL TOP UP</span>';
-          } else if (statusMurni === "APPROVED") {
-            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#28a745;">✅ TOP UP APPROVED</span>';
+          // 🌟 LOGIKA BARU TOP UP: Menunggu Admin ketik "OK" 🌟
+          if (statusMurni === "PENDING" || statusMurni === "") {
+            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#FFA500;">⏳ MENUNGGU APPROVAL ADMIN</span>';
+          } else if (statusMurni === "OK" || statusMurni === "APPROVED" || statusMurni.indexOf("BERHASIL") !== -1) {
+            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#28a745;">✅ TOP UP BERHASIL</span>';
+          } else {
+            htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#666;">' + statusMurni + '</span>';
           }
         }
         
@@ -792,15 +795,23 @@
       document.getElementById('m-topup').style.display = 'none';
       showLoading(true);
 
-      KUKAMI_API("requestTopUp", { idRider: curRider.id, nominal: nom, metode: metodeFinal })
+      // Pastikan namaRider ikut dikirim ke backend
+      KUKAMI_API("requestTopUp", { idRider: curRider.id, namaRider: curRider.nama, nominal: nom, metode: metodeFinal })
         .then(function() { 
-          initDashboard(); 
           showLoading(false); 
-          toast("🚀 Terkirim!"); 
+          
+          // 1. Munculkan Notifikasi Sukses (Menahan layar sampai diklik OK)
+          alert("✅ Pengajuan TOP UP berhasil dikirim ke sistem. Menunggu approval Admin.");
+          
+          // 2. Kosongkan Form Top Up
           document.getElementById('u-nom').value = "";
           document.getElementById('u-met').selectedIndex = 0;
           if(document.getElementById('container-ket-lainnya')) document.getElementById('container-ket-lainnya').style.display = 'none';
           if(document.getElementById('u-ket-lainnya')) document.getElementById('u-ket-lainnya').value = "";
+          
+          // 3. 🌟 PINDAH OTOMATIS KE RIWAYAT & REFRESH DATA 🌟
+          switchMainTab('riwayat');
+          initDashboard(); 
         })
         .catch(function(err) {
           showLoading(false);
