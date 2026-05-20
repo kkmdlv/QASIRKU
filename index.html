@@ -44,16 +44,18 @@
     .qty-btn { background: #eee; border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; }
     #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 40000; width: 85%; pointer-events: none; }
     .toast { background: rgba(0,0,0,0.85); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; text-align: center; border-left: 5px solid var(--gold); }
-    .rank-badge { padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: #000; display: inline-block; margin-left: 4px; vertical-align: middle; }
     
-    /* --- SUNTIKAN UI V2: PREMIUM TICKER & SALDO LOCK --- */
-    .saldo-lock { white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-    #r-kelas { font-size: 10px; font-weight: 900; margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+    /* --- SUNTIKAN UI V2: OPSI 1 MINI GRID LAYOUT --- */
+    .saldo-lock { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 6px; }
+    #r-kelas { font-size: 10px; font-weight: 900; margin-top: 2px; letter-spacing: 1px; text-transform: uppercase; }
     
-    .ticker-wrap { width: 100%; background: rgba(0,0,0,0.25); padding: 6px 0; border-radius: 0 0 15px 15px; margin-top: 15px; display: flex; align-items: center; }
-    .ticker-label { font-size: 10px; font-weight: 900; color: var(--gold); padding: 0 10px; border-right: 1px solid rgba(255,255,255,0.2); white-space: nowrap; z-index: 2; }
-    .ticker-move { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; font-size: 11px; font-weight: 600; color: white; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; }
-    @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+    .stat-section { margin-top: 15px; }
+    .stat-title { font-size: 10px; font-weight: 900; color: var(--gold); margin-bottom: 6px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .stat-box { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 4px; border-radius: 10px; text-align: center; }
+    .stat-box span { display: block; font-size: 9px; color: #e5e5e5; margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px; }
+    .stat-box b { font-size: 13px; color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .stat-rank { font-size: 9px; background: var(--gold); color: black; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
   </style>
 </head>
 <body>
@@ -69,26 +71,35 @@
   <div id="app-content" style="display:none; padding-top: 15px;">
     <div id="p-home" class="page active">
       
-      <div class="card-profile" style="padding: 0; padding-top: 15px;"> 
-        <div style="display:flex; align-items:center; gap:12px; padding: 0 15px;">
-          <img id="r-foto" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee; flex-shrink: 0;">
+      <div class="card-profile"> 
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img id="r-foto" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee; flex-shrink: 0;">
           <div style="flex:1; overflow: hidden; min-width: 0;">
             <h3 id="r-nama" style="margin:0; font-size:15px; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h3>
             <div id="r-kelas">MEMUAT...</div>
-          </div>
-          <div style="text-align:right; flex-shrink: 0;">
-            <small style="font-size:10px; color:var(--gold); font-weight:bold;">SALDO</small><br>
             <div class="saldo-lock">
-              <span id="r-saldo" style="font-weight:bold; font-size:14px;">Rp 0</span>
-              <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; font-weight:bold; flex-shrink: 0; cursor:pointer;">+</button>
+              <span style="font-size: 11px; color: var(--gold); font-weight: bold;">💰 SALDO:</span>
+              <span id="r-saldo" style="font-weight:bold; font-size:14px; color: white;">Rp 0</span>
+              <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; font-weight:bold; flex-shrink: 0; cursor:pointer; font-size: 14px; line-height: 0; padding: 0; display: flex; justify-content: center; align-items: center;">+</button>
             </div>
           </div>
         </div>
         
-        <div class="ticker-wrap">
-          <div class="ticker-label">📊 STATS</div>
-          <div style="overflow: hidden; flex: 1;">
-            <div class="ticker-move" id="r-ticker">Memuat statistik...</div>
+        <div class="stat-section">
+          <div class="stat-title">📅 HARI INI</div>
+          <div class="stats-grid">
+            <div class="stat-box"><span>TOTAL</span><b id="h-tot">0 <span class="stat-rank">-</span></b></div>
+            <div class="stat-box"><span>ON</span><b id="h-on">0 <span class="stat-rank">-</span></b></div>
+            <div class="stat-box"><span>OFF</span><b id="h-off">0 <span class="stat-rank">-</span></b></div>
+          </div>
+        </div>
+
+        <div class="stat-section">
+          <div class="stat-title">🗓️ BULAN INI</div>
+          <div class="stats-grid">
+            <div class="stat-box"><span>TOTAL</span><b id="b-tot">0 <span class="stat-rank">-</span></b></div>
+            <div class="stat-box"><span>ON</span><b id="b-on">0 <span class="stat-rank">-</span></b></div>
+            <div class="stat-box"><span>OFF</span><b id="b-off">0 <span class="stat-rank">-</span></b></div>
           </div>
         </div>
       </div>
@@ -312,7 +323,6 @@
         });
     }
 
-    // 🌟 FUNGSI INIT DASHBOARD FULL TANPA ERROR JS
     function initDashboard() {
       document.getElementById('p-login').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
@@ -323,43 +333,39 @@
           showLoading(false);
           if (!res) return;
 
-          // 1. Set Profil Murni
+          // 1. Set Profil & Saldo
           if (res.foto) document.getElementById('r-foto').src = res.foto;
           document.getElementById('r-nama').innerText = curRider.nama.toUpperCase();
           document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
 
-          // 2. Set Status / Kelas di Bawah Nama (TANPA ANIMASI)
+          // 2. Set Status / Kelas di Bawah Nama
           var statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
           var elKelas = document.getElementById('r-kelas');
           
           if (statusRider.indexOf("TOP") !== -1) {
             elKelas.innerHTML = "⭐ " + statusRider;
             elKelas.style.color = "#FFD700"; // Gold
-            elKelas.className = "";
           } else if (statusRider.indexOf("UNDER") !== -1) {
             elKelas.innerHTML = "🚨 " + statusRider;
             elKelas.style.color = "#ff4d4d"; // Merah
-            elKelas.className = "";
           } else {
             elKelas.innerHTML = "🛡️ " + (statusRider || "PERFORMER");
             elKelas.style.color = "#ffffff"; // Putih bersih
-            elKelas.className = "";
           }
 
-          // 3. Rakit Teks Panjang untuk Premium Ticker (FULL RANKING)
+          // 3. Isi Data Opsi 1 (Mini Grid Layout)
           var h = res.stats.hari || {};
           var b = res.stats.bulan || {};
           
-          var tickerText = "HARI INI: Tot " + (h.total||0) + " #" + (h.rank_tot||"-") + 
-                           " (ON: " + (h.on||0) + " #" + (h.rank_on||"-") + 
-                           " | OFF: " + (h.off||0) + " #" + (h.rank_off||"-") + ")   •   ";
-                           
-          tickerText += "BULAN INI: Tot " + (b.total||0) + " #" + (b.rank_tot||"-") + 
-                        " (ON: " + (b.on||0) + " #" + (b.rank_on||"-") + 
-                        " | OFF: " + (b.off||0) + " #" + (b.rank_off||"-") + ")   •   TETAP SEMANGAT DAN HATI-HATI DI JALAN! 🚀";
-          
-          document.getElementById('r-ticker').innerText = tickerText;
+          document.getElementById('h-tot').innerHTML = (h.total||0) + ' <span class="stat-rank">#' + (h.rank_tot||"-") + '</span>';
+          document.getElementById('h-on').innerHTML = (h.on||0) + ' <span class="stat-rank">#' + (h.rank_on||"-") + '</span>';
+          document.getElementById('h-off').innerHTML = (h.off||0) + ' <span class="stat-rank">#' + (h.rank_off||"-") + '</span>';
 
+          document.getElementById('b-tot').innerHTML = (b.total||0) + ' <span class="stat-rank">#' + (b.rank_tot||"-") + '</span>';
+          document.getElementById('b-on').innerHTML = (b.on||0) + ' <span class="stat-rank">#' + (b.rank_on||"-") + '</span>';
+          document.getElementById('b-off').innerHTML = (b.off||0) + ' <span class="stat-rank">#' + (b.rank_off||"-") + '</span>';
+
+          // Master Tarif & Render Riwayat
           masterTarif = res.listTarif || [];
           if (res.rekening) { curRider.rekening = res.rekening; }
 
@@ -514,7 +520,6 @@
         });
     }
 
-    // 🌟 FUNGSI RENDER RIWAYAT DENGAN LOGIKA STATUS LENGKAP
     function renderRiwayat(data) {
       var h = '', lastD = '';
       if (!data || !data.length) return document.getElementById('list-riwayat').innerHTML = '<div style="padding:30px; text-align:center; color:#888;">Belum ada riwayat</div>';
@@ -726,7 +731,6 @@
       } else { containerForm.style.display = 'none'; }
     }
 
-    // 🌟 FUNGSI CANCEL STRUK DENGAN AUTO-REDIRECT
     function kirimPengajuanCancel(idStruk) {
       var alasanInput = document.getElementById('input-alasan-cancel').value.trim();
       if (alasanInput.length < 10) { alert("❌ Alasan terlalu pendek! Minimal 10 karakter."); return; }
@@ -760,7 +764,6 @@
       } catch(e) {}
     }
 
-    // 🌟 FUNGSI TOP UP DENGAN AUTO-REDIRECT
     function saveTopUp() {
       var nom = getAngka(document.getElementById('u-nom').value);
       var met = document.getElementById('u-met').value;
@@ -841,7 +844,6 @@
     }
 
     function tutupAlert() { document.getElementById('m-alert').style.display = 'none'; }
-    function updateRank(id, val, tipe) { var el = document.getElementById(id); if (!el) return; if (!val || val == 0 || val == "") { el.innerHTML = ''; return; } var warna = (val <= 10) ? (tipe === 'hari' ? 'bg-rank-hari-top' : 'bg-rank-bulan-top') : 'bg-rank-grey'; el.innerHTML = '<span class="rank-badge ' + warna + '">#' + val + '</span>'; }
   </script>
 </body>
 </html>
