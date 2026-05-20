@@ -44,18 +44,17 @@
     .qty-btn { background: #eee; border: none; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; }
     #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 40000; width: 85%; pointer-events: none; }
     .toast { background: rgba(0,0,0,0.85); color: white; padding: 12px 20px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; font-weight: 600; text-align: center; border-left: 5px solid var(--gold); }
-    
-    /* --- SUNTIKAN UI V2: OPSI 1 MINI GRID LAYOUT --- */
-    .saldo-lock { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 6px; }
-    #r-kelas { font-size: 10px; font-weight: 900; margin-top: 2px; letter-spacing: 1px; text-transform: uppercase; }
-    
-    .stat-section { margin-top: 15px; }
-    .stat-title { font-size: 10px; font-weight: 900; color: var(--gold); margin-bottom: 6px; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    .stat-box { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 4px; border-radius: 10px; text-align: center; }
-    .stat-box span { display: block; font-size: 9px; color: #e5e5e5; margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px; }
-    .stat-box b { font-size: 13px; color: white; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .stat-rank { font-size: 9px; background: var(--gold); color: black; padding: 2px 5px; border-radius: 4px; font-weight: 900; }
+    .rank-badge { padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; color: #000; display: inline-block; margin-left: 4px; vertical-align: middle; }
+    .bg-rank-hari-top { background: linear-gradient(to right, #FFD700, #FFA500); }
+    .bg-rank-bulan-top { background: #FFFF00; }
+    .bg-rank-grey { background: #E5E7EB; color: #4B5563; }
+    .label-wrapper { display: inline-block; width: 85px; font-weight: bold; }
+    .perf-icon { display: inline-block; font-size: 14px; margin-left: 4px; line-height: 1; vertical-align: 4px; position: relative; top: 0px; }
+    #r-nama { display: flex; align-items: center; margin: 0 0 5px 0; line-height: 1.2; flex-wrap: nowrap; }
+    @keyframes shine { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes pulse-red { 0% { transform: scale(1); filter: drop-shadow(0 0px red); } 50% { transform: scale(1.2); filter: drop-shadow(0 5px red); } 100% { transform: scale(1); filter: drop-shadow(0 0px red); } }
+    .anim-diamond { animation: shine 2s infinite ease-in-out; }
+    .anim-red { animation: pulse-red 1.5s infinite; }
   </style>
 </head>
 <body>
@@ -70,40 +69,38 @@
 
   <div id="app-content" style="display:none; padding-top: 15px;">
     <div id="p-home" class="page active">
-      
-      <div class="card-profile"> 
+      <div class="card-profile">
         <div style="display:flex; align-items:center; gap:12px;">
-          <img id="r-foto" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee; flex-shrink: 0;">
-          <div style="flex:1; overflow: hidden; min-width: 0;">
-            <h3 id="r-nama" style="margin:0; font-size:15px; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h3>
-            <div id="r-kelas">MEMUAT...</div>
-            <div class="saldo-lock">
-              <span style="font-size: 11px; color: var(--gold); font-weight: bold;">💰 SALDO:</span>
-              <span id="r-saldo" style="font-weight:bold; font-size:14px; color: white;">Rp 0</span>
-              <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; font-weight:bold; flex-shrink: 0; cursor:pointer; font-size: 14px; line-height: 0; padding: 0; display: flex; justify-content: center; align-items: center;">+</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="stat-section">
-          <div class="stat-title">📅 HARI INI</div>
-          <div class="stats-grid">
-            <div class="stat-box"><span>TOTAL</span><b id="h-tot">0 <span class="stat-rank">-</span></b></div>
-            <div class="stat-box"><span>ON</span><b id="h-on">0 <span class="stat-rank">-</span></b></div>
-            <div class="stat-box"><span>OFF</span><b id="h-off">0 <span class="stat-rank">-</span></b></div>
-          </div>
-        </div>
-
-        <div class="stat-section">
-          <div class="stat-title">🗓️ BULAN INI</div>
-          <div class="stats-grid">
-            <div class="stat-box"><span>TOTAL</span><b id="b-tot">0 <span class="stat-rank">-</span></b></div>
-            <div class="stat-box"><span>ON</span><b id="b-on">0 <span class="stat-rank">-</span></b></div>
-            <div class="stat-box"><span>OFF</span><b id="b-off">0 <span class="stat-rank">-</span></b></div>
+          <img id="r-foto" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--gold); object-fit: cover; background:#eee;">
+          <div style="flex:1;">
+  <h3 id="r-nama" style="margin:0; font-size:15px; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);"></h3>
+  
+  <div style="font-size: 9px; color: rgba(255,255,255,0.9); margin-top: 6px; line-height: 1.4; font-family: 'Inter', sans-serif;">
+    <div style="display: flex; justify-content: space-between; padding-bottom: 0px; margin-bottom: 0px;">
+      <div>
+        <span style="display:inline-block; width:52px; font-weight: 800; color: #FFD700;">HARI INI</span>: 
+        <b id="h-trip">0</b> <span style="color:#FFD700">#<span id="h-rank">-</span></span> 
+        (ON: <b id="h-on">0</b> <span style="color:#FFD700">#<span id="h-rank-on">-</span></span> | 
+        OFF: <b id="h-off">0</b> <span style="color:#FFD700">#<span id="h-rank-off">-</span></span>)
+      </div>      
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+      <div>
+        <span style="display:inline-block; width:52px; font-weight: 800; color: #FFD700;">BULAN INI</span>: 
+        <b id="b-trip">0</b> <span style="color:#FFD700">#<span id="b-rank">-</span></span> 
+        (ON: <b id="b-on">0</b> <span style="color:#FFD700">#<span id="b-rank-on">-</span></span> | 
+        OFF: <b id="b-off">0</b> <span style="color:#FFD700">#<span id="b-rank-off">-</span></span>)
+      </div>      
+    </div>
+  </div>
+  </div>
+          <div style="text-align:right;">
+            <small style="font-size:10px; color:var(--gold); font-weight:bold;">SALDO</small><br>
+            <span id="r-saldo" style="font-weight:bold; font-size:14px;">Rp 0</span>
+            <button onclick="document.getElementById('m-topup').style.display='block'" style="background:var(--gold); color:white; border:none; width:22px; height:22px; border-radius:50%; margin-left:5px; font-weight:bold;">+</button>
           </div>
         </div>
       </div>
-
       <div style="display:flex; gap:10px; margin-bottom:15px;"><button id="tb1" class="tab-btn tab-active" onclick="setSubTab(1)">MANUAL</button><button id="tb2" class="tab-btn tab-inactive" onclick="setSubTab(2)">TARIF</button></div>
       
       <div id="f-manual">
@@ -225,8 +222,10 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzJpOfgfHtT-_IAXbo810GkIC_s-JSU7uVJ1cHeGb8wUWAJXFBif4-hd9hIP-VMUDY4hg/exec"; 
+    // 🔴 BOS BESAR WAJIB ISI URL INI DENGAN LINK DEPLOY "DOPOST" WEB APP GAS YANG BARU!
+    const API_URL = "https://script.google.com/macros/s/AKfycbzXXbJQkp6KJBbisJVHaV9g5l5x22Oe0Nvaty2i6xVu_69nCiKpNPkHn9zn_sUuEFoybQ/exec"; 
 
+    // 🚀 MESIN PENGGANTI google.script.run (Super Ringan & Anti-CORS)
     async function KUKAMI_API(actionName, parameters) {
       try {
         const response = await fetch(API_URL, {
@@ -288,6 +287,7 @@
       document.getElementById('n-riwayat').className = 'nav-item ' + (t === 'riwayat' ? 'active' : '');
     }
 
+    // 🌟 1. PERUBAHAN FUNGSI LOGIN MENGGUNAKAN API FETCH
     function prosesLogin() {
       var debug = document.getElementById('debug-layar');
       if(debug) debug.innerText = "⏳ MENGHUBUNGKAN CLOUD SERVER...";
@@ -323,6 +323,7 @@
         });
     }
 
+    // 🌟 2. PERUBAHAN FUNGSI INIT DASHBOARD MENGGUNAKAN API FETCH
     function initDashboard() {
       document.getElementById('p-login').style.display = 'none';
       document.getElementById('app-content').style.display = 'block';
@@ -333,39 +334,37 @@
           showLoading(false);
           if (!res) return;
 
-          // 1. Set Profil & Saldo
-          if (res.foto) document.getElementById('r-foto').src = res.foto;
-          document.getElementById('r-nama').innerText = curRider.nama.toUpperCase();
-          document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
+          var perfMap = {
+            "TOP PERFORM": { icon: "💎", className: "anim-diamond" },
+            "TOP PERFORMER": { icon: "💎", className: "anim-diamond" },
+            "PERFORM": { icon: "🛡️", className: "" },
+            "PERFORMER": { icon: "🛡️", className: "" },
+            "UNDERPERFORM": { icon: "🚨", className: "anim-red" },
+            "UNDERPERFORMER": { icon: "🚨", className: "anim-red" }
+          };
 
-          // 2. Set Status / Kelas di Bawah Nama
           var statusRider = res.kelas ? res.kelas.toUpperCase().trim() : "";
-          var elKelas = document.getElementById('r-kelas');
+          var dataPerf = perfMap[statusRider] || { icon: "👤", className: "" };
+          var badgeHtml = '<span class="perf-icon ' + dataPerf.className + '">' + dataPerf.icon + '</span>';
           
-          if (statusRider.indexOf("TOP") !== -1) {
-            elKelas.innerHTML = "⭐ " + statusRider;
-            elKelas.style.color = "#FFD700"; // Gold
-          } else if (statusRider.indexOf("UNDER") !== -1) {
-            elKelas.innerHTML = "🚨 " + statusRider;
-            elKelas.style.color = "#ff4d4d"; // Merah
-          } else {
-            elKelas.innerHTML = "🛡️ " + (statusRider || "PERFORMER");
-            elKelas.style.color = "#ffffff"; // Putih bersih
-          }
-
-          // 3. Isi Data Opsi 1 (Mini Grid Layout)
-          var h = res.stats.hari || {};
-          var b = res.stats.bulan || {};
+          document.getElementById('r-nama').innerHTML = curRider.nama + ' ' + badgeHtml;
+          document.getElementById('r-saldo').innerText = "Rp " + Number(res.saldo || 0).toLocaleString();
+          if (res.foto) document.getElementById('r-foto').src = res.foto;
           
-          document.getElementById('h-tot').innerHTML = (h.total||0) + ' <span class="stat-rank">#' + (h.rank_tot||"-") + '</span>';
-          document.getElementById('h-on').innerHTML = (h.on||0) + ' <span class="stat-rank">#' + (h.rank_on||"-") + '</span>';
-          document.getElementById('h-off').innerHTML = (h.off||0) + ' <span class="stat-rank">#' + (h.rank_off||"-") + '</span>';
+          document.getElementById('h-trip').innerText = res.stats.hari.total || 0;
+          document.getElementById('h-rank').innerText = res.stats.hari.rank_tot || "-"; 
+          document.getElementById('h-on').innerText = res.stats.hari.on || 0;
+          document.getElementById('h-rank-on').innerText = res.stats.hari.rank_on || "-";
+          document.getElementById('h-off').innerText = res.stats.hari.off || 0;
+          document.getElementById('h-rank-off').innerText = res.stats.hari.rank_off || "-";
+          
+          document.getElementById('b-trip').innerText = res.stats.bulan.total || 0;
+          document.getElementById('b-rank').innerText = res.stats.bulan.rank_tot || "-";
+          document.getElementById('b-on').innerText = res.stats.bulan.on || 0;
+          document.getElementById('b-rank-on').innerText = res.stats.bulan.rank_on || "-";
+          document.getElementById('b-off').innerText = res.stats.bulan.off || 0;
+          document.getElementById('b-rank-off').innerText = res.stats.bulan.rank_off || "-";
 
-          document.getElementById('b-tot').innerHTML = (b.total||0) + ' <span class="stat-rank">#' + (b.rank_tot||"-") + '</span>';
-          document.getElementById('b-on').innerHTML = (b.on||0) + ' <span class="stat-rank">#' + (b.rank_on||"-") + '</span>';
-          document.getElementById('b-off').innerHTML = (b.off||0) + ' <span class="stat-rank">#' + (b.rank_off||"-") + '</span>';
-
-          // Master Tarif & Render Riwayat
           masterTarif = res.listTarif || [];
           if (res.rekening) { curRider.rekening = res.rekening; }
 
@@ -484,6 +483,7 @@
     function tutupKeranjang() { document.getElementById('m-cart').style.display = 'none'; }
     function closeConfirm() { document.getElementById('m-confirm').style.display = 'none'; pendingItem = null; }
 
+    // 🌟 3. PERUBAHAN FUNGSI FINAL PROCESS MENGGUNAKAN API FETCH
     function finalProcess(tipe, overrideItems) {
       var itemsToSubmit = overrideItems || cart;
       if (itemsToSubmit.length === 0) return toast("⚠️ Keranjang kosong!");
@@ -542,6 +542,7 @@
             gayaNominalTeks += ' text-decoration: line-through; color: #cc0000; opacity: 0.5;';
           }
         } else {
+          // 🌟 LOGIKA BARU TOP UP: Menunggu Admin ketik "OK" 🌟
           if (statusMurni === "PENDING" || statusMurni === "") {
             htmlTagStatus = '<span class="hl-tag hl-topup" style="background:#FFA500;">⏳ MENUNGGU APPROVAL ADMIN</span>';
           } else if (statusMurni === "OK" || statusMurni === "APPROVED" || statusMurni.indexOf("BERHASIL") !== -1) {
@@ -600,6 +601,7 @@
       document.getElementById('s-rider').innerText = curRider.nama;
       document.getElementById('s-tipe').innerText = res.tipe ? res.tipe.toUpperCase() : "-";
       
+      // 🌟 PERUBAHAN PENTING UNTUK LINK QR RATING DI GITHUB
       var currentUrl = window.location.origin + window.location.pathname;
       var baseUrl = currentUrl.replace('index.html', '').replace('Index.html', '');
       if (!baseUrl.endsWith('/')) baseUrl += '/';
@@ -678,6 +680,7 @@
       }).catch(function() { showLoading(false); toast("⚠️ Gagal memproses gambar."); });
     }
     
+    // 🌟 4. LOGIKA SHARE OTOMATIS GITHUB & FALLBACK AMAN
     function shareStruk() {
       var area = document.getElementById('struk-area');
       showLoading(true);
@@ -710,6 +713,7 @@
               });
           } else { 
             showLoading(false); 
+            // Fallback download
             const a = document.createElement('a');
             a.href = canvas.toDataURL("image/png");
             a.download = 'Struk_KUKAMI.png';
@@ -731,6 +735,7 @@
       } else { containerForm.style.display = 'none'; }
     }
 
+    // 🌟 5. PERUBAHAN FUNGSI CANCEL STRUK MENGGUNAKAN API FETCH (AUTO-REDIRECT RIWAYAT)
     function kirimPengajuanCancel(idStruk) {
       var alasanInput = document.getElementById('input-alasan-cancel').value.trim();
       if (alasanInput.length < 10) { alert("❌ Alasan terlalu pendek! Minimal 10 karakter."); return; }
@@ -741,11 +746,18 @@
         .then(function(res) {
           showLoading(false);
           if (res && res.status === "success") {
+            // Layar akan berhenti di sini sampai Rider klik "OK"
             alert("✅ " + res.message);
-            closeStruk();
-            switchMainTab('riwayat');
+            
+            // 🌟 SUNTIKAN REDIRECT OTOMATIS SETELAH KLIK OK
+            closeStruk(); // 1. Menutup pop-up struk
+            switchMainTab('riwayat'); // 2. Memindahkan layar ke Tab Riwayat
+            
+            // Refresh data di background agar status di Riwayat langsung berubah jadi "Menunggu Approval"
             initDashboard(); 
-          } else { alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); }
+          } else { 
+            alert("❌ Gagal: " + (res.message || "Terjadi kesalahan.")); 
+          }
         })
         .catch(function(err) {
           showLoading(false); 
@@ -764,6 +776,7 @@
       } catch(e) {}
     }
 
+    // 🌟 6. PERUBAHAN FUNGSI TOP UP MENGGUNAKAN API FETCH
     function saveTopUp() {
       var nom = getAngka(document.getElementById('u-nom').value);
       var met = document.getElementById('u-met').value;
@@ -782,16 +795,21 @@
       document.getElementById('m-topup').style.display = 'none';
       showLoading(true);
 
+      // Pastikan namaRider ikut dikirim ke backend
       KUKAMI_API("requestTopUp", { idRider: curRider.id, namaRider: curRider.nama, nominal: nom, metode: metodeFinal })
         .then(function() { 
           showLoading(false); 
+          
+          // 1. Munculkan Notifikasi Sukses (Menahan layar sampai diklik OK)
           alert("✅ Pengajuan TOP UP berhasil dikirim ke sistem. Menunggu approval Admin.");
           
+          // 2. Kosongkan Form Top Up
           document.getElementById('u-nom').value = "";
           document.getElementById('u-met').selectedIndex = 0;
           if(document.getElementById('container-ket-lainnya')) document.getElementById('container-ket-lainnya').style.display = 'none';
           if(document.getElementById('u-ket-lainnya')) document.getElementById('u-ket-lainnya').value = "";
           
+          // 3. 🌟 PINDAH OTOMATIS KE RIWAYAT & REFRESH DATA 🌟
           switchMainTab('riwayat');
           initDashboard(); 
         })
@@ -844,6 +862,7 @@
     }
 
     function tutupAlert() { document.getElementById('m-alert').style.display = 'none'; }
+    function updateRank(id, val, tipe) { var el = document.getElementById(id); if (!el) return; if (!val || val == 0 || val == "") { el.innerHTML = ''; return; } var warna = (val <= 10) ? (tipe === 'hari' ? 'bg-rank-hari-top' : 'bg-rank-bulan-top') : 'bg-rank-grey'; el.innerHTML = '<span class="rank-badge ' + warna + '">#' + val + '</span>'; }
   </script>
 </body>
 </html>
