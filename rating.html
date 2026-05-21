@@ -164,13 +164,17 @@
           tombolKirim.disabled = false;
           
           if (status === "success") {
-            document.getElementById('rating-card-area').innerHTML = '<div style="padding:40px 10px;"><div style="font-size:50px; margin-bottom:15px;">🌟</div><h3 style="color:var(--maroon); font-weight:900; margin:0 0 10px 0;">TERIMA KASIH!</h3><p style="color:#555; font-size:13px; line-height:1.6; margin:0;">Ulasan Anda telah disimpan.<br>Halaman ini akan menutup otomatis dalam 5 detik.</p></div>';
-            
-            // 🌟 DETIKAN AUTO-CLOSE 5 DETIK
-            setTimeout(function() {
-              window.close();
-            }, 5000);
-            
+            // 🌟 Tampilan Sukses Statis & Tombol WA (Anti-Nyasar ke Login)
+            document.getElementById('rating-card-area').innerHTML = `
+              <div style="padding:40px 10px;">
+                <div style="font-size:60px; margin-bottom:15px;">🌟</div>
+                <h3 style="color:var(--maroon); font-weight:900; margin:0 0 10px 0; font-family:'Montserrat', sans-serif;">TERIMA KASIH!</h3>
+                <p style="color:#555; font-size:13px; line-height:1.6; margin-bottom:25px; font-weight:600;">Ulasan Anda sangat berarti untuk peningkatan kualitas layanan KUKAMI.</p>
+                <button onclick="window.location.href='https://wa.me/6281220774717'" style="background:#25D366; color:white; border:none; padding:15px; border-radius:50px; font-weight:bold; width:100%; cursor:pointer; font-size:13px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);">
+                  KEMBALI KE WHATSAPP
+                </button>
+              </div>
+            `;
           } else if (status === "duplicate") {
             alert("Maaf, Transaksi dengan nomor nota ini sudah pernah dinilai sebelumnya.");
           } else if (status === "fraud_blocked") {
