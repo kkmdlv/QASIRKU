@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;600;700;800&family=Roboto:wght@400&display=swap" rel="stylesheet">
   
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#800000">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3212/3212608.png">
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -65,6 +69,12 @@
     <div style="text-align:center; margin-top:80px; margin-bottom:20px;"><div style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:42px;letter-spacing:-3px;"><span style="color:var(--maroon);">KU</span><span style="color:var(--navy);">KAMI</span></div><span style="font-family:'Roboto',sans-serif;font-size:13px;letter-spacing:11.5px;text-indent: 8px;text-transform:lowercase;display:block;">delivery</span></div>
     <div id="debug-layar" style="background:var(--maroon); color:var(--gold); padding:10px; font-weight:bold; font-size:12px; border-radius:10px; margin-bottom:10px; border:1px solid var(--gold); text-align:center;">API ENGINE ACTIVE - GITHUB MODE</div>
     <div style="padding: 20px;"><input type="text" id="user" placeholder="Nama Rider"><input type="password" id="pin" placeholder="PIN" inputmode="numeric"><button class="btn" onclick="prosesLogin()">MASUK</button></div>
+    <div id="install-container" style="display:none; text-align:center; margin-top:25px; padding: 0 20px;">
+      <button id="btn-install" class="btn" style="background:var(--gold); color:#000; box-shadow:0 4px 10px rgba(212, 175, 55, 0.4); border: 2px solid #fff;">
+        ⬇️ INSTALL QASIRKU
+      </button>
+      <div style="font-size: 10px; color: #555; margin-top: 8px;">Install ke Layar Utama (Home Screen)</div>
+    </div>
   </div>
 
   <div id="app-content" style="display:none; padding-top: 15px;">
@@ -864,6 +874,53 @@
 
     function tutupAlert() { document.getElementById('m-alert').style.display = 'none'; }
     function updateRank(id, val, tipe) { var el = document.getElementById(id); if (!el) return; if (!val || val == 0 || val == "") { el.innerHTML = ''; return; } var warna = (val <= 10) ? (tipe === 'hari' ? 'bg-rank-hari-top' : 'bg-rank-bulan-top') : 'bg-rank-grey'; el.innerHTML = '<span class="rank-badge ' + warna + '">#' + val + '</span>'; }
+
+    // ==========================================
+    // MESIN PWA & TOMBOL INSTALL
+    // ==========================================
+    let deferredPrompt;
+    
+    // Mendaftarkan Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker Registered'))
+          .catch(err => console.log('Service Worker Error', err));
+      });
+    }
+
+    // Menangkap Trigger Install dari HP
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); // Cegah banner default bawaan Chrome
+      deferredPrompt = e; // Simpan event-nya
+      
+      // Munculkan tombol Emas "INSTALL APLIKASI" di halaman login
+      var installBox = document.getElementById('install-container');
+      if(installBox) installBox.style.display = 'block';
+    });
+
+    // Aksi saat Tombol Install di-klik
+    var btnInstall = document.getElementById('btn-install');
+    if (btnInstall) {
+      btnInstall.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt(); // Munculkan pop-up install native
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            document.getElementById('install-container').style.display = 'none';
+          }
+          deferredPrompt = null;
+        }
+      });
+    }
+
+    // Hilangkan tombol jika aplikasi sukses diinstall
+    window.addEventListener('appinstalled', () => {
+      var installBox = document.getElementById('install-container');
+      if(installBox) installBox.style.display = 'none';
+      toast("✅ Aplikasi berhasil diinstall!");
+    });
+    
   </script>
 </body>
 </html>
