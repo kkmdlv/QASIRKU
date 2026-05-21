@@ -1,15 +1,21 @@
 {
-  "name": "KUKAMI",
+  "name": "KUKAMI Superapp",
   "short_name": "KUKAMI",
-  "start_url": "https://script.google.com/macros/s/AKfycbwfebQ8V1-2Iw9O4x_hLD4Wv_TqFhmz0zK_G2IhyjD9V6M9h_WM-r3caSQespQuncpa2g/exec",
+  "description": "Aplikasi Operasional Rider KUKAMI",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#E5E5E5",
+  "background_color": "#800000",
   "theme_color": "#800000",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3212/3212608.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3212/3212608.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
