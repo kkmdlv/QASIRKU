@@ -28,7 +28,7 @@
     .tab-btn { flex:1; padding:12px; border:none; border-radius:12px; font-weight:bold; cursor:pointer; font-size: 12px; }
     .tab-active { background: var(--maroon) !important; color: white !important; }
     .tab-inactive { background: #D1D1D1 !important; color: #666 !important; }
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #eee; z-index: 1000; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding-top: 12px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #eee; z-index: 1000; }
     .nav-item { flex: 1; text-align: center; color: #bbb; font-size: 11px; font-weight: 800; cursor: pointer; }
     .nav-item.active { color: var(--maroon); }
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; }
