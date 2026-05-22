@@ -234,7 +234,7 @@
 
   <script>
     // 🔴 BOS BESAR WAJIB ISI URL INI DENGAN LINK DEPLOY "DOPOST" WEB APP GAS YANG BARU!
-    const API_URL = "https://script.google.com/macros/s/AKfycbzXXbJQkp6KJBbisJVHaV9g5l5x22Oe0Nvaty2i6xVu_69nCiKpNPkHn9zn_sUuEFoybQ/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbwUEYYo1w7wY03OhAF9EhwNvxS0EFVeSlbRrjBayEnZgJwVJPHVs1q4L60tkF8KsJKEow/exec"; 
 
     // 🚀 MESIN PENGGANTI google.script.run (Super Ringan & Anti-CORS)
     async function KUKAMI_API(actionName, parameters) {
@@ -920,7 +920,30 @@
       if(installBox) installBox.style.display = 'none';
       toast("✅ Aplikasi berhasil diinstall!");
     });
+
+    function tampilkanRaport(response) {
+  // 'response' adalah data yang dikirim dari Code.gs
+  document.getElementById('netHari').innerText = "Rp " + response.net_hari.toLocaleString('id-ID');
+  document.getElementById('netBulan').innerText = "Rp " + response.net_bulan.toLocaleString('id-ID');
+  document.getElementById('raportModal').style.display = 'block';
+}
     
   </script>
+
+  <div id="raportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999;">
+  <div style="background:#800000; color:#FFD700; margin:25% auto; padding:20px; width:85%; border:2px solid #FFD700; border-radius:15px; text-align:center;">
+    <h2 style="margin-top:0;">RAPORT KUKAMI</h2>
+    <div style="background:#fff; color:#800000; padding:10px; border-radius:8px; margin-bottom:10px;">
+      <p style="margin:0; font-size:12px;">Hari Ini</p>
+      <strong id="netHari" style="font-size:18px;">Rp 0</strong>
+    </div>
+    <div style="background:#fff; color:#800000; padding:10px; border-radius:8px; margin-bottom:15px;">
+      <p style="margin:0; font-size:12px;">Bulan Ini</p>
+      <strong id="netBulan" style="font-size:18px;">Rp 0</strong>
+    </div>
+    <button onclick="document.getElementById('raportModal').style.display='none'" style="background:#FFD700; border:none; padding:10px 30px; border-radius:5px; font-weight:bold;">TUTUP</button>
+  </div>
+</div>
+  
 </body>
 </html>
