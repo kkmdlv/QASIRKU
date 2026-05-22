@@ -922,10 +922,17 @@
     });
 
     function tampilkanRaport(response) {
-  // 'response' adalah data yang dikirim dari Code.gs
-  document.getElementById('netHari').innerText = "Rp " + response.net_hari.toLocaleString('id-ID');
-  document.getElementById('netBulan').innerText = "Rp " + response.net_bulan.toLocaleString('id-ID');
+  // Kita ambil data dari objek stats yang dikirim dari Code.gs
+  var netHari = response.stats.hari.net;
+  var netBulan = response.stats.bulan.net;
+
+  // Tampilkan ke dalam elemen Modal
+  document.getElementById('netHari').innerText = "Rp " + netHari.toLocaleString('id-ID');
+  document.getElementById('netBulan').innerText = "Rp " + netBulan.toLocaleString('id-ID');
+  
+  // Munculkan Modal
   document.getElementById('raportModal').style.display = 'block';
+}
 }
     
   </script>
