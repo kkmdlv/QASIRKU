@@ -939,14 +939,26 @@
 }
     
     function tampilkanRaport(response) {
-  // Kita ambil data dari objek stats yang dikirim dari Code.gs
-  var netHari = response.stats.hari.net;
-  var netBulan = response.stats.bulan.net;
+  var s = response.stats; // Singkatan biar kodenya rapi
 
-  // Tampilkan ke dalam elemen Modal
-  document.getElementById('netHari').innerText = "Rp " + netHari.toLocaleString('id-ID');
-  document.getElementById('netBulan').innerText = "Rp " + netBulan.toLocaleString('id-ID');
-  
+  // --- SUNTIK DATA HARI INI ---
+  document.getElementById('rap-h-tot').innerText = s.hari.total;
+  document.getElementById('rap-h-rtot').innerText = s.hari.rank_tot;
+  document.getElementById('rap-h-on').innerText = s.hari.on;
+  document.getElementById('rap-h-ron').innerText = s.hari.rank_on;
+  document.getElementById('rap-h-off').innerText = s.hari.off;
+  document.getElementById('rap-h-roff').innerText = s.hari.rank_off;
+  document.getElementById('rap-h-net').innerText = "Rp " + s.hari.net.toLocaleString('id-ID');
+
+  // --- SUNTIK DATA BULAN INI ---
+  document.getElementById('rap-b-tot').innerText = s.bulan.total;
+  document.getElementById('rap-b-rtot').innerText = s.bulan.rank_tot;
+  document.getElementById('rap-b-on').innerText = s.bulan.on;
+  document.getElementById('rap-b-ron').innerText = s.bulan.rank_on;
+  document.getElementById('rap-b-off').innerText = s.bulan.off;
+  document.getElementById('rap-b-roff').innerText = s.bulan.rank_off;
+  document.getElementById('rap-b-net').innerText = "Rp " + s.bulan.net.toLocaleString('id-ID');
+
   // Munculkan Modal
   document.getElementById('raportModal').style.display = 'block';
 }
@@ -955,17 +967,43 @@
   </script>
 
   <div id="raportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999;">
-  <div style="background:#800000; color:#FFD700; margin:25% auto; padding:20px; width:85%; border:2px solid #FFD700; border-radius:15px; text-align:center;">
-    <h2 style="margin-top:0;">RAPORT KUKAMI</h2>
-    <div style="background:#fff; color:#800000; padding:10px; border-radius:8px; margin-bottom:10px;">
-      <p style="margin:0; font-size:12px;">Hari Ini</p>
-      <strong id="netHari" style="font-size:18px;">Rp 0</strong>
+  <div style="background:#800000; color:#fff; margin:10% auto; padding:20px; width:85%; border:2px solid #FFD700; border-radius:15px; max-height: 80vh; overflow-y: auto; font-family: 'Inter', sans-serif;">
+    
+    <h3 style="margin-top:0; color:#FFD700; text-align:center; border-bottom: 1px dashed #FFD700; padding-bottom: 10px; font-weight: 900;">📊 RAPORT RIDER KUKAMI</h3>
+
+    <div style="text-align:left; margin-top:15px;">
+      <h4 style="color:#FFD700; margin-bottom:8px; font-size:14px;">📅 PERFORMA HARI INI</h4>
+      <div style="background:#fff; color:#333; padding:12px; border-radius:8px; font-size:12px; line-height:1.8;">
+        <div style="display:flex; justify-content:space-between;"><span>• Total Trx</span> <b><span id="rap-h-tot">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-h-rtot">-</span>)</span></b></div>
+        <div style="display:flex; justify-content:space-between;"><span>• Trx Online</span> <b><span id="rap-h-on">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-h-ron">-</span>)</span></b></div>
+        <div style="display:flex; justify-content:space-between;"><span>• Trx Offline</span> <b><span id="rap-h-off">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-h-roff">-</span>)</span></b></div>
+        <hr style="border:0.5px dashed #ccc; margin:8px 0;">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-h-net">Rp 0</b></div>
+      </div>
+      
+      <div style="background:#FFEA00; color:#000; padding:10px; border-radius:8px; margin-top:8px; font-size:11px; line-height:1.4; border-left: 4px solid #800000;">
+        <b style="color:#800000;">📝 Resume Harian:</b><br>
+        <span id="rap-h-resume">"Pertahankan fokus Anda hari ini! Terus kejar target transaksi untuk meningkatkan pendapatan bersih."</span>
+      </div>
     </div>
-    <div style="background:#fff; color:#800000; padding:10px; border-radius:8px; margin-bottom:15px;">
-      <p style="margin:0; font-size:12px;">Bulan Ini</p>
-      <strong id="netBulan" style="font-size:18px;">Rp 0</strong>
+
+    <div style="text-align:left; margin-top:20px;">
+      <h4 style="color:#FFD700; margin-bottom:8px; font-size:14px;">🗓️ PERFORMA BULAN INI</h4>
+      <div style="background:#fff; color:#333; padding:12px; border-radius:8px; font-size:12px; line-height:1.8;">
+        <div style="display:flex; justify-content:space-between;"><span>• Total Trx</span> <b><span id="rap-b-tot">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-b-rtot">-</span>)</span></b></div>
+        <div style="display:flex; justify-content:space-between;"><span>• Trx Online</span> <b><span id="rap-b-on">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-b-ron">-</span>)</span></b></div>
+        <div style="display:flex; justify-content:space-between;"><span>• Trx Offline</span> <b><span id="rap-b-off">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-b-roff">-</span>)</span></b></div>
+        <hr style="border:0.5px dashed #ccc; margin:8px 0;">
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-b-net">Rp 0</b></div>
+      </div>
+      
+      <div style="background:#FFEA00; color:#000; padding:10px; border-radius:8px; margin-top:8px; font-size:11px; line-height:1.4; border-left: 4px solid #800000;">
+        <b style="color:#800000;">📝 Resume Bulanan:</b><br>
+        <span id="rap-b-resume">"Performa Anda tercatat dengan baik bulan ini. Tingkatkan pelayanan untuk mencapai posisi Rank #1!"</span>
+      </div>
     </div>
-    <button onclick="document.getElementById('raportModal').style.display='none'" style="background:#FFD700; border:none; padding:10px 30px; border-radius:5px; font-weight:bold;">TUTUP</button>
+
+    <button onclick="document.getElementById('raportModal').style.display='none'" style="background:#FFD700; color:#800000; border:none; width:100%; padding:14px; border-radius:50px; font-weight:900; margin-top:20px; font-size:14px; cursor:pointer;">[ TUTUP RAPORT ]</button>
   </div>
 </div>
   
