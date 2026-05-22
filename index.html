@@ -939,7 +939,7 @@
 }
     
     function tampilkanRaport(response) {
-  var s = response.stats; // Singkatan biar kodenya rapi
+  var s = response.stats;
 
   // --- SUNTIK DATA HARI INI ---
   document.getElementById('rap-h-tot').innerText = s.hari.total;
@@ -967,9 +967,9 @@
   </script>
 
   <div id="raportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999;">
-  <div style="background:#800000; color:#fff; margin:10% auto; padding:20px; width:85%; border:2px solid #FFD700; border-radius:15px; max-height: 80vh; overflow-y: auto; font-family: 'Inter', sans-serif;">
+  <div style="background:#800000; color:#fff; margin:15% auto; padding:20px; width:85%; border:2px solid #FFD700; border-radius:15px; max-height: 80vh; overflow-y: auto; font-family: 'Inter', sans-serif;">
     
-    <h3 style="margin-top:0; color:#FFD700; text-align:center; border-bottom: 1px dashed #FFD700; padding-bottom: 10px; font-weight: 900;">📊 RAPORT RIDER KUKAMI</h3>
+    <h3 style="margin-top:0; color:#FFD700; text-align:center; border-bottom: 1px dashed #FFD700; padding-bottom: 10px; font-weight: 900;">📊 RAPORT RIDER</h3>
 
     <div style="text-align:left; margin-top:15px;">
       <h4 style="color:#FFD700; margin-bottom:8px; font-size:14px;">📅 PERFORMA HARI INI</h4>
@@ -978,12 +978,7 @@
         <div style="display:flex; justify-content:space-between;"><span>• Trx Online</span> <b><span id="rap-h-on">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-h-ron">-</span>)</span></b></div>
         <div style="display:flex; justify-content:space-between;"><span>• Trx Offline</span> <b><span id="rap-h-off">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-h-roff">-</span>)</span></b></div>
         <hr style="border:0.5px dashed #ccc; margin:8px 0;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-h-net">Rp 0</b></div>
-      </div>
-      
-      <div style="background:#FFEA00; color:#000; padding:10px; border-radius:8px; margin-top:8px; font-size:11px; line-height:1.4; border-left: 4px solid #800000;">
-        <b style="color:#800000;">📝 Resume Harian:</b><br>
-        <span id="rap-h-resume">"Pertahankan fokus Anda hari ini! Terus kejar target transaksi untuk meningkatkan pendapatan bersih."</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Pendapatan Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-h-net">Rp 0</b></div>
       </div>
     </div>
 
@@ -994,12 +989,7 @@
         <div style="display:flex; justify-content:space-between;"><span>• Trx Online</span> <b><span id="rap-b-on">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-b-ron">-</span>)</span></b></div>
         <div style="display:flex; justify-content:space-between;"><span>• Trx Offline</span> <b><span id="rap-b-off">0</span> Trip <span style="color:#800000">(Rank #<span id="rap-b-roff">-</span>)</span></b></div>
         <hr style="border:0.5px dashed #ccc; margin:8px 0;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-b-net">Rp 0</b></div>
-      </div>
-      
-      <div style="background:#FFEA00; color:#000; padding:10px; border-radius:8px; margin-top:8px; font-size:11px; line-height:1.4; border-left: 4px solid #800000;">
-        <b style="color:#800000;">📝 Resume Bulanan:</b><br>
-        <span id="rap-b-resume">"Performa Anda tercatat dengan baik bulan ini. Tingkatkan pelayanan untuk mencapai posisi Rank #1!"</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px;"><span>• <b>Pendapatan Bersih (NET)</b></span> <b style="color:#28a745;" id="rap-b-net">Rp 0</b></div>
       </div>
     </div>
 
