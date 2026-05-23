@@ -815,7 +815,7 @@
           var myFp = getFingerprint(); 
           // ⚠️ PENTING: Ganti ID_DEPLOYMENT_ANDA dengan URL Web App Anda
           // Di dalam saveTopUp, ganti bagian linkApprove dengan ini:
-var linkApprove = window.location.origin + window.location.pathname + "?action=approve&invoice=" + res.nota + "&fp=" + myFp;
+var linkApprove = "https://script.google.com/macros/s/AKfycbyEkyDlxRn70bnji5TWeYG0GmLVb-MG_JITCHxZMEn4fISlQowYnbjSSUyflLovjM6BXA/exec?action=approve&invoice=" + res.nota;
 
           var pesan = `*REQUEST TOP UP KUKAMI*%0A%0A` +
                       `Nama: *${curRider.nama}*%0A` +
