@@ -235,7 +235,7 @@
 
   <script>
     // 🔴 BOS BESAR WAJIB ISI URL INI DENGAN LINK DEPLOY "DOPOST" WEB APP GAS YANG BARU!
-    const API_URL = "https://script.google.com/macros/s/AKfycbxXE0g2unNbc5XStXuvet5s3dK8rmn-pEoTthACoJCkGIzMFv9WLCFv3onndzibJspDZQ/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbyEkyDlxRn70bnji5TWeYG0GmLVb-MG_JITCHxZMEn4fISlQowYnbjSSUyflLovjM6BXA/exec"; 
 
     // 🚀 MESIN PENGGANTI google.script.run (Super Ringan & Anti-CORS)
     async function KUKAMI_API(actionName, parameters) {
@@ -807,21 +807,31 @@
       document.getElementById('m-topup').style.display = 'none';
       showLoading(true);
 
-      // Pastikan namaRider ikut dikirim ke backend
       KUKAMI_API("requestTopUp", { idRider: curRider.id, namaRider: curRider.nama, nominal: nom, metode: metodeFinal })
-        .then(function() { 
+        .then(function(res) { 
           showLoading(false); 
           
-          // 1. Munculkan Notifikasi Sukses (Menahan layar sampai diklik OK)
-          alert("✅ Pengajuan TOP UP berhasil dikirim ke sistem. Menunggu approval Admin.");
+          // 1. Generate Link WA
+          var myFp = getFingerprint(); 
+          // ⚠️ PENTING: Ganti ID_DEPLOYMENT_ANDA dengan URL Web App Anda
+          // Di dalam saveTopUp, ganti bagian linkApprove dengan ini:
+var linkApprove = window.location.origin + window.location.pathname + "?action=approve&invoice=" + res.nota + "&fp=" + myFp;
+
+          var pesan = `*REQUEST TOP UP KUKAMI*%0A%0A` +
+                      `Nama: *${curRider.nama}*%0A` +
+                      `Nominal: *Rp ${nom.toLocaleString()}*%0A` +
+                      `Invoice: *${res.nota}*%0A%0A` +
+                      `Mohon lampirkan bukti transfer, lalu klik link untuk approve:%0A` +
+                      linkApprove;
+
+          window.open("https://wa.me/6289630042391?text=" + pesan, '_blank');
           
-          // 2. Kosongkan Form Top Up
+          // 2. Reset Form
           document.getElementById('u-nom').value = "";
           document.getElementById('u-met').selectedIndex = 0;
           if(document.getElementById('container-ket-lainnya')) document.getElementById('container-ket-lainnya').style.display = 'none';
-          if(document.getElementById('u-ket-lainnya')) document.getElementById('u-ket-lainnya').value = "";
           
-          // 3. 🌟 PINDAH OTOMATIS KE RIWAYAT & REFRESH DATA 🌟
+          // 3. Pindah Tab & Refresh
           switchMainTab('riwayat');
           initDashboard(); 
         })
@@ -830,7 +840,7 @@
           toast("⚠️ Gagal mengirim Top Up.");
         });
     }
-
+    
     function logout() { if (confirm("Logout?")) { localStorage.clear(); location.reload(); } }
 
     window.onload = function() {
@@ -963,6 +973,22 @@
   document.getElementById('raportModal').style.display = 'block';
 }
 
+function kirimWaKeAldo(data) {
+  // Ganti dengan data asli sesuai variabel di sistem Anda
+  const noWaAldo = "6289630042391"; 
+  const linkApprove = "https://script.google.com/macros/s/ID_DEPLOYMENT_ANDA/exec?action=approve&invoice=" + data.nota + "&fp=" + localStorage.getItem("kukami_fp");
+
+  const pesan = `*REQUEST TOP UP KUKAMI*%0A%0A` +
+                `Nama: *${curRider.nama}*%0A` +
+                `ID Rider: *${curRider.id}*%0A` +
+                `Nominal: *Rp ${Number(data.nominal).toLocaleString()}*%0A` +
+                `Invoice: *${data.nota}*%0A%0A` +
+                `Mohon lampirkan bukti transfer di chat ini lalu klik link berikut untuk approve:%0A` +
+                `${linkApprove}`;
+
+  // Langsung buka WhatsApp
+  window.open("https://wa.me/" + noWaAldo + "?text=" + pesan, '_blank');
+}
     
   </script>
 
