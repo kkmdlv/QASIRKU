@@ -59,13 +59,6 @@
     @keyframes pulse-red { 0% { transform: scale(1); filter: drop-shadow(0 0px red); } 50% { transform: scale(1.2); filter: drop-shadow(0 5px red); } 100% { transform: scale(1); filter: drop-shadow(0 0px red); } }
     .anim-diamond { animation: shine 2s infinite ease-in-out; }
     .anim-red { animation: pulse-red 1.5s infinite; }
-
-    #app-content {
-    filter: blur(10px);
-    pointer-events: none;
-    transition: filter 0.5s ease;
-}
-    
   </style>
 </head>
 <body>
@@ -84,8 +77,7 @@
     </div>
   </div>
 
-  <div id="app-content" style="display:none; filter: blur(10px); pointer-events: none;">
-     </div>
+  <div id="app-content" style="display:none; padding-top: 15px;">
     <div id="p-home" class="page active">
       <div class="card-profile">
         <div style="display:flex; align-items:center; gap:12px;">
@@ -997,23 +989,6 @@ function kirimWaKeAldo(data) {
   // Langsung buka WhatsApp
   window.open("https://wa.me/" + noWaAldo + "?text=" + pesan, '_blank');
 }
-
-    // Fungsi untuk membuka kunci setelah install
-function bukaKunciApp() {
-  var appContent = document.getElementById('app-content');
-  appContent.style.filter = 'blur(0px)';
-  appContent.style.pointerEvents = 'auto';
-  // Jika ingin setelah install langsung redirect ke login:
-  // document.getElementById('p-login').style.display = 'block';
-}
-
-// Panggil fungsi ini saat appinstalled terjadi
-window.addEventListener('appinstalled', () => {
-  toast("✅ Aplikasi berhasil diinstall! Silakan Login.");
-  bukaKunciApp();
-});
-
-    
     
   </script>
 
