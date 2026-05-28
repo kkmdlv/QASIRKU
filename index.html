@@ -443,14 +443,23 @@
       } else {
         var keywords = ["ongkir", "ongkos", "tarif", "tarip", "fee", "jasa"];
         var isRev = false;
+        
+        // Logika menggunakan Regex untuk memastikan kata kunci berdiri sendiri
         for (var i = 0; i < keywords.length; i++) {
-          if (ket.indexOf(keywords[i]) !== -1) { isRev = true; break; }
+          var regex = new RegExp("\\b" + keywords[i] + "\\b", "i");
+          if (regex.test(ket)) { 
+            isRev = true; 
+            break; 
+          }
         }
+
         pendingItem = { ket: ketRaw.toUpperCase(), nominal: getAngka(curNomStr), qty: 1, potongan: isRev ? 0.2 : 0 };
         if (isRev) {
           document.getElementById('confirm-msg').innerHTML = "Layanan '" + ketRaw + "' memotong komisi 20%.";
           document.getElementById('m-confirm').style.display = 'block';
-        } else { executeAddToCart(); }
+        } else { 
+          executeAddToCart(); 
+        }
       }
       inputKet.value = "";
     }
